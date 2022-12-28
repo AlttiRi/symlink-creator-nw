@@ -68,6 +68,7 @@ const {
 
 /** @param {Event} event */
 function onFileInputChange(event) {
+  /** @type {HTMLInputElement} */
   const fileElem = event.target;
   setFiles(fileElem.files);
   resetDtItems();
