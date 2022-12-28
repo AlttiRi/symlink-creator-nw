@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import {bytesToSizeWinLike, dateToDayDateTimeString} from "../../util.js";
+import {bytesToSizeWinLike, dateToDayDateTimeString} from "../util.js";
 import {file} from "./file-input-state-private.js";
 </script>
 
