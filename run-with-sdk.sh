@@ -1,0 +1,1 @@
+C:/progs/nwjs-sdk/nw.exe . &
