@@ -8,7 +8,8 @@
 
 <script setup>
 import {bytesToSizeWinLike, dateToDayDateTimeString} from "../util.js";
-import {file} from "./file-input-state-private.js";
+const props = defineProps(["state"]);
+const {file} = props.state.private;
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,8 @@
 
 <script setup>
 import {computed} from "vue";
-import {dropHoverItemCount} from "./file-input-state-private.js";
+const props = defineProps(["state"]);
+const {dropHoverItemCount} = props.state.private;
 const text = computed(() => {
   const postfix = dropHoverItemCount.value > 1 ? "s" : "";
   return `Drop ${dropHoverItemCount.value} file${postfix}`;

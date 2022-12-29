@@ -15,13 +15,13 @@
     >
 
     <span class="content hover" v-if="dropHover">
-      <slot name="hover"><FileInputDefaultHoverText/></slot>
+      <slot name="hover"><FileInputDefaultHoverText :state="state"/></slot>
     </span>
     <span class="content selected" v-else-if="file && !parsing">
-      <slot name="selected"><FileInputDefaultText/></slot>
+      <slot name="selected"><FileInputDefaultText :state="state"/></slot>
     </span>
     <span class="content prompt" v-else>
-      <slot name="prompt"><FileInputDefaultText/></slot>
+      <slot name="prompt"><FileInputDefaultText :state="state"/></slot>
     </span>
 
   </label>
@@ -36,15 +36,6 @@ import FileInputDefaultHoverText from "./FileInputDefaultHoverText.vue";
 import FileInputDefaultText from "./FileInputDefaultText.vue";
 
 import {ref, toRefs, onMounted, computed, onBeforeUnmount} from "vue";
-import {
-  parsing,
-  file,
-  dropHover,
-  setFiles,
-  setDataTransfer,
-  setDataTransferHover,
-  resetDataTransferHover, resetDtItems
-} from "./file-input-state-private.js";
 
 const props = defineProps({
   globalDropZone: {
@@ -59,12 +50,22 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
+  state: {}
 });
 const {
   /** @type {import("vue").Ref<Boolean>} */
-  globalDropZone,
+  globalDropZone
 } = toRefs(props);
 
+const {
+  parsing,
+  file,
+  dropHover,
+  setFiles,
+  setDataTransfer,
+  setDataTransferHover,
+  resetDataTransferHover, resetDtItems,
+} = props.state.private;
 
 /** @param {Event} event */
 function onFileInputChange(event) {

@@ -1,8 +1,8 @@
 <script setup>
 import fs from "./node-fs.js";
-import {ref, toRaw, watchEffect} from "vue";
+import {ref, computed, toRaw, unref} from "vue";
 import FileInput from "./file-input/FileInput.vue";
-import {fileEntries} from "./file-input/file-input-state.js";
+import {getStateInstance} from "./file-input/file-input-state.js";
 
 const isNW = typeof nw !== "undefined";
 
@@ -10,6 +10,18 @@ function reload() {
   // chrome.runtime.reload?.();
   location.reload();
 }
+
+const fiDestinationState = getStateInstance();
+const destDir = computed(() => {
+  console.log(toRaw(unref(fiDestinationState.fileEntries)));
+  return fiDestinationState.fileEntries.value?.[0]?.name;
+});
+const destDirName = computed(() => {
+  return destDir.value?.name;
+});
+
+const fiTargetState = getStateInstance();
+const {fileEntries: targetFiles} = fiTargetState;
 
 const items = ref([
     {filepath: "demo-filepath-1/demo-filename1.txt", filename: "demo-filename1.txt"},
@@ -32,22 +44,6 @@ async function drop(event) {
   }
 }
 
-async function dropDest(event) {
-  console.log(event);
-  event.preventDefault();
-  const items = event.dataTransfer.items;
-  console.log(items);
-}
-
-function dragover(event) {
-  event.preventDefault();
-  event.dataTransfer.dropEffect = "copy";
-}
-
-watchEffect(() => {
-  console.log("watchEffect", toRaw(fileEntries.value));
-});
-
 </script>
 
 <template>
@@ -56,9 +52,12 @@ watchEffect(() => {
   <table>
     <tbody>
       <tr>
-        <td><div id="drop-zone" @dragover="dragover" @drop="dropDest">Select destination</div></td>
-        <td><div id="drop-zone" @dragover="dragover" @drop="drop">Add file/folder</div></td>
-<!--        <FileInput/>-->
+        <td><FileInput :state="fiDestinationState" :global-drop-zone="false"/></td>
+        <td><FileInput :state="fiTargetState" :global-drop-zone="false"/></td>
+      </tr>
+      <tr>
+        <td>{{destDirName}}</td>
+        <td>{{targetFiles}}</td>
       </tr>
       <tr v-for="item of items">
         <td>
