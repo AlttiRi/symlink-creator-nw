@@ -12,6 +12,7 @@
            :multiple="multiple"
            @change="onFileInputChange"
            style="display: none"
+           :nwdirectory="false"
     >
 
     <span class="content hover" v-if="dropHover">
@@ -50,7 +51,7 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  state: {}
+  state: {null:""}
 });
 const {
   /** @type {import("vue").Ref<Boolean>} */
@@ -64,7 +65,7 @@ const {
   setFiles,
   setDataTransfer,
   setDataTransferHover,
-  resetDataTransferHover, resetDtItems,
+  resetDataTransferHover,
 } = props.state.private;
 
 /** @param {Event} event */
@@ -72,7 +73,6 @@ function onFileInputChange(event) {
   /** @type {HTMLInputElement} */
   const fileElem = event.target;
   setFiles(fileElem.files);
-  resetDtItems();
 }
 
 

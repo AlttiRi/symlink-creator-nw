@@ -1,11 +1,13 @@
 import {ref, computed, watchEffect, toRaw, readonly} from "vue";
 import {WebFileEntry} from "./WebFileEntry.js";
 
-export function getStateInstance() {
+export function getStateInstance({recursive} = {}) {
     /** @type {import("vue").Ref<File[]>} */
     const files = ref([]);
     /** @type {import("vue").Ref<DataTransferItem[]>} */
     const dtItems = ref([]);
+    /** @type {import("vue").Ref<DataTransfer>} */
+    const dataTransfer = ref(null);
 
     /** @type {import("vue").Ref<Boolean>} */
     const dropHover = ref(false);
@@ -21,9 +23,11 @@ export function getStateInstance() {
     watchEffect(async () => {
         const time = Date.now();
         parsing.value = true;
-        if (dtItems.value.length) {
-            fileEntries.value = await WebFileEntry.fromDataTransferItems(dtItems.value);
+        if (dataTransfer.value) {
+            console.log("[fromDataTransferItems]");
+            fileEntries.value = await WebFileEntry.fromDataTransfer(dataTransfer.value, recursive);
         } else {
+            console.log("[fromFiles]");
             fileEntries.value = WebFileEntry.fromFiles(files.value);
         }
         parsing.value = false;
@@ -55,18 +59,24 @@ export function getStateInstance() {
         dropHoverTypes.value = [];
     }
 
-    /** @param {DataTransfer} dataTransfer */
-    function setDataTransfer(dataTransfer) {
-        console.log(dataTransfer);
-        setFiles(dataTransfer.files);
-        setDtItems(dataTransfer.items);
+    /** @param {DataTransfer} dt */
+    function setDataTransfer(dt) {
+        console.log("setDataTransfer", dt);
+        setFiles(dt.files, false);
+        setDtItems(dt.items);
+        dataTransfer.value = dt;
     }
-    /** @param {FileList} filelist */
-    function setFiles(filelist) {
+    /** @param {FileList} filelist
+        @param {boolean} resetDataTransfer */
+    function setFiles(filelist, resetDataTransfer = true) {
         /** @type {File[]} */
         const _files = [...filelist];
         files.value = _files;
         console.log("[setFiles]:", _files);
+        if (resetDataTransfer) {
+            dataTransfer.value = null;
+            dtItems.value = [];
+        }
     }
     /** @param {DataTransferItemList} items */
     function setDtItems(items) {
@@ -74,12 +84,9 @@ export function getStateInstance() {
         const _dtItems = [...items];
         dtItems.value = _dtItems;
         console.log("[setDtItems]:", _dtItems); // bug in chromium: `type` and `kind` is "" in the console when expand the array.
-
-        console.log(_dtItems[0].kind);
-        console.log(_dtItems[0].type);
-    }
-    function resetDtItems() {
-        dtItems.value = [];
+        console.log("[setDtItems][0]:", {
+            kind: _dtItems[0].kind, type: _dtItems[0].type
+        });
     }
 
     return {
@@ -88,8 +95,8 @@ export function getStateInstance() {
             dropHover, dropHoverItemCount, dropHoverTypes,
             fileEntries, parsing,
             file, count,
-            setDataTransferHover, resetDataTransferHover, setDataTransfer,
-            setFiles, setDtItems, resetDtItems
+            setDataTransferHover, resetDataTransferHover,
+            setDataTransfer, setFiles,
         }
     };
 }

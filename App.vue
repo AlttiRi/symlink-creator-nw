@@ -5,23 +5,32 @@ import FileInput from "./file-input/FileInput.vue";
 import {getStateInstance} from "./file-input/file-input-state.js";
 
 const isNW = typeof nw !== "undefined";
+if (isNW) {
+  nw.Window.get().showDevTools();
+}
 
 function reload() {
   // chrome.runtime.reload?.();
   location.reload();
 }
 
-const fiDestinationState = getStateInstance();
+const fiDestinationState = getStateInstance({recursive: false});
 const destDir = computed(() => {
   console.log(toRaw(unref(fiDestinationState.fileEntries)));
-  return fiDestinationState.fileEntries.value?.[0]?.name;
+  return fiDestinationState.fileEntries.value?.[0];
 });
 const destDirName = computed(() => {
   return destDir.value?.name;
 });
 
-const fiTargetState = getStateInstance();
+
+const fiTargetState = getStateInstance({recursive: false});
 const {fileEntries: targetFiles} = fiTargetState;
+const targetFileNames = computed(() => {
+  console.log(toRaw(unref(fiTargetState.fileEntries)));
+  return fiTargetState.fileEntries.value?.map(entry => entry.name);
+});
+
 
 const items = ref([
     {filepath: "demo-filepath-1/demo-filename1.txt", filename: "demo-filename1.txt"},
@@ -57,7 +66,7 @@ async function drop(event) {
       </tr>
       <tr>
         <td>{{destDirName}}</td>
-        <td>{{targetFiles}}</td>
+        <td>{{targetFileNames}}</td>
       </tr>
       <tr v-for="item of items">
         <td>

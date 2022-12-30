@@ -24,6 +24,10 @@ export class WebFileEntry {
         this.type = type;
     }
 
+    get nativePath() {
+        return this.file?.path;
+    }
+
     get name() {
         return this._name || this.file?.name;
     }
@@ -105,16 +109,24 @@ export class WebFileEntry {
     }
 
     /**
-     * @param {DataTransferItem[]} dtItems
+     * @param {DataTransfer} dt
+     * @param {boolean} recursive
      * @return {Promise<WebFileEntry[]>}
      */
-    static async fromDataTransferItems(dtItems) {
+    static async fromDataTransfer(dt, recursive) {
+        /** @type {DataTransferItem[]} */
+        const dtItems = [...dt.items];
+        /** @type {File[]} */
+        const files = [...dt.files];
+
+        /** @type {FileSystemEntry[]} */
         const fileSystemEntries = await dtItemsToFileSystemEntries(dtItems);
         console.log("[fileSystemEntries]:", fileSystemEntries);
+
         /** @type {WebFileEntry[]} */
         const result = [];
         for (const fileSystemEntry of fileSystemEntries) {
-            result.push(await fromFileSystemEntry(fileSystemEntry));
+            result.push(await fromFileSystemEntry(fileSystemEntry, null, recursive, files.shift()));
         }
         return result;
     }
@@ -136,9 +148,11 @@ export class WebFileEntry {
 /**
  * @param {FileSystemEntry} fsEntry
  * @param {WebFileEntry|null} parent
+ * @param {boolean} recursive=true
+ * @param {File} [file]
  * @return {Promise<WebFileEntry|null>}
  */
-async function fromFileSystemEntry(fsEntry, parent = null) {
+async function fromFileSystemEntry(fsEntry, parent = null, recursive = true, file) {
     if (fsEntry.isFile) {
         try {
             const file = await toFile(/** @type {FileSystemFileEntry} */ fsEntry);
@@ -147,15 +161,17 @@ async function fromFileSystemEntry(fsEntry, parent = null) {
             console.error("[fromFileSystemEntry][error]", fsEntry.name, e);
             return null;
         }
-    } else if (fsEntry.isDirectory) {
-        const dirEntry = new WebFileEntry({type: "folder", parent, name: fsEntry.name});
+    } else if (fsEntry.isDirectory && recursive) {
+        const dirEntry = new WebFileEntry({type: "folder", parent, name: fsEntry.name, file});
         /** @type {AsyncGenerator<FileSystemEntry>} */
         const entries = readFileSystemDirectoryEntry(/** @type {FileSystemDirectoryEntry} */ fsEntry);
         for await (const entry of entries) {
             // The entries will be attached to the parent (`dirEntry`).
-            await fromFileSystemEntry(entry, dirEntry);
+            await fromFileSystemEntry(entry, dirEntry, recursive);
         }
         return dirEntry;
+    } else {
+        return new WebFileEntry({type: "folder", parent, name: fsEntry.name, file});
     }
 }
 
