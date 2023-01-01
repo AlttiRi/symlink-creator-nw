@@ -1,6 +1,33 @@
 import {ref, computed, watchEffect, toRaw, readonly} from "vue";
 import {WebFileEntry} from "./WebFileEntry.js";
 
+
+/**
+ * @typedef {
+ *  {
+ *    private: {
+ *      dropHover:          import("vue").Ref<Boolean>,
+ *      dropHoverItemCount: import("vue").Ref<Number>,
+ *      dropHoverTypes:     import("vue").Ref<String[]>,
+ *      fileEntries:        import("vue").Ref<WebFileEntry[]>,
+ *      parsing:            import("vue").Ref<Boolean>,
+ *      file:               import("vue").ComputedRef<WebFileEntry>,
+ *      count:              import("vue").ComputedRef<Number>,
+ *      setFiles:               function(fl: FileList),
+ *      setDataTransfer:        function(dt: DataTransfer),
+ *      setDataTransferHover:   function(dt: DataTransfer),
+ *      resetDataTransferHover: function(),
+ *    },
+ *    fileEntries: import("vue").DeepReadonly<import("vue").Ref<WebFileEntry[]>>
+ *  }
+ * } FileInputState
+ */
+
+/**
+ * @param {Object}  opts
+ * @param {boolean} opts.recursive
+ * @return {FileInputState}
+ */
 export function getStateInstance({recursive} = {}) {
     /** @type {import("vue").Ref<File[]>} */
     const files = ref([]);
@@ -63,7 +90,7 @@ export function getStateInstance({recursive} = {}) {
     function setDataTransfer(dt) {
         console.log("setDataTransfer", dt);
         setFiles(dt.files, false);
-        setDtItems(dt.items);
+        _setDtItems(dt.items);
         dataTransfer.value = dt;
     }
     /** @param {FileList} filelist
@@ -79,12 +106,12 @@ export function getStateInstance({recursive} = {}) {
         }
     }
     /** @param {DataTransferItemList} items */
-    function setDtItems(items) {
+    function _setDtItems(items) {
         /** @type {DataTransferItem[]} */
         const _dtItems = [...items];
         dtItems.value = _dtItems;
-        console.log("[setDtItems]:", _dtItems); // bug in chromium: `type` and `kind` is "" in the console when expand the array.
-        console.log("[setDtItems][0]:", {
+        console.log("[_setDtItems]:", _dtItems); // bug in chromium: `type` and `kind` is "" in the console when expand the array.
+        console.log("[_setDtItems][0]:", {
             kind: _dtItems[0].kind, type: _dtItems[0].type
         });
     }

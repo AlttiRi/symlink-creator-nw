@@ -51,13 +51,17 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  state: {null:""}
+  state: {
+    required: true
+  }
 });
 const {
   /** @type {import("vue").Ref<Boolean>} */
   globalDropZone
 } = toRefs(props);
 
+/** @type {FileInputState} */
+const state = props.state;
 const {
   parsing,
   file,
@@ -66,7 +70,7 @@ const {
   setDataTransfer,
   setDataTransferHover,
   resetDataTransferHover,
-} = props.state.private;
+} = state.private;
 
 /** @param {Event} event */
 function onFileInputChange(event) {
