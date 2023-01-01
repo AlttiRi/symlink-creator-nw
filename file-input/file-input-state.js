@@ -3,25 +3,24 @@ import {WebFileEntry} from "./WebFileEntry.js";
 
 
 /**
- * @typedef {
- *  {
- *    private: {
- *      dropHover:          import("vue").Ref<Boolean>,
- *      dropHoverItemCount: import("vue").Ref<Number>,
- *      dropHoverTypes:     import("vue").Ref<String[]>,
- *      fileEntries:        import("vue").Ref<WebFileEntry[]>,
- *      parsing:            import("vue").Ref<Boolean>,
- *      file:               import("vue").ComputedRef<WebFileEntry>,
- *      count:              import("vue").ComputedRef<Number>,
- *      setFiles:               function(fl: FileList),
- *      setDataTransfer:        function(dt: DataTransfer),
- *      setDataTransferHover:   function(dt: DataTransfer),
- *      resetDataTransferHover: function(),
- *    },
- *    fileEntries: import("vue").DeepReadonly<import("vue").Ref<WebFileEntry[]>>
- *  }
- * } FileInputState
- */
+ * @typedef {Object} FileInputStatePrivate
+ * @property {import("vue").Ref<Boolean>}        dropHover
+ * @property {import("vue").Ref<Number>}         dropHoverItemCount
+ * @property {import("vue").Ref<String[]>}       dropHoverTypes
+ * @property {import("vue").Ref<WebFileEntry[]>} fileEntries
+ * @property {import("vue").Ref<Boolean>}        parsing
+ * @property {import("vue").ComputedRef<WebFileEntry>}  file
+ * @property {import("vue").ComputedRef<Number>}        count
+ * @property {function(fl: FileList)}      setFiles
+ * @property {function(dt: DataTransfer)}  setDataTransfer
+ * @property {function(dt: DataTransfer)}  setDataTransferHover
+ * @property {function()}                  resetDataTransferHover
+ * */
+/**
+ * @typedef {Object} FileInputState
+ * @property {import("vue").DeepReadonly<import("vue").Ref<WebFileEntry[]>>} fileEntries
+ * @property {FileInputStatePrivate} private
+ * */
 
 /**
  * @param {Object}  opts
