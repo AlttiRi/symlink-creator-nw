@@ -12,7 +12,7 @@
            :multiple="multiple"
            @change="onFileInputChange"
            style="display: none"
-           :nwdirectory="false"
+           :nwdirectory="nwdirectory"
     >
 
     <span class="content hover" v-if="dropHover">
@@ -53,6 +53,10 @@ const props = defineProps({
   },
   state: {
     required: true
+  },
+  nwdirectory: {
+    type: Boolean,
+    default: false
   }
 });
 const {

@@ -17,15 +17,19 @@ import {WebFileEntry} from "./WebFileEntry.js";
  * @property {function()}                  resetDataTransferHover
  * */
 /**
+ * @typedef {import("vue").DeepReadonly<import("vue").Ref<WebFileEntry[]>>} WebFileEntryArray
+ * */
+/**
  * @typedef {Object} FileInputState
- * @property {import("vue").DeepReadonly<import("vue").Ref<WebFileEntry[]>>} fileEntries
- * @property {FileInputStatePrivate} private
+ * @typedef  {function()}        clearInput
+ * @property {WebFileEntryArray} fileEntries
+ * @property {FileInputStatePrivate}  private
  * */
 
 /**
  * @param {Object}  opts
  * @param {boolean} opts.recursive
- * @return {FileInputState}
+ // * @return {FileInputState}
  */
 export function getStateInstance({recursive} = {}) {
     /** @type {import("vue").Ref<File[]>} */
@@ -115,8 +119,15 @@ export function getStateInstance({recursive} = {}) {
         });
     }
 
+    function clearInput() {
+        files.value = [];
+        dataTransfer.value = null;
+        dtItems.value = [];
+    }
+
     return {
         fileEntries: readonly(fileEntries),
+        clearInput,
         private: {
             dropHover, dropHoverItemCount, dropHoverTypes,
             fileEntries, parsing,
