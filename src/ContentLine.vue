@@ -3,7 +3,7 @@
 
     <div class="line-1 buttons">
       <button :disabled="!hasDestination">Create</button>
-      <button>Remove</button>
+      <button @click="remove">Remove</button>
     </div>
 
     <div class="source-path line-1">{{item.filepath.slice(0, -item.filename.length)}}</div>
@@ -19,11 +19,15 @@
 
 <script setup>
 import {ref} from "vue";
-import {hasDestination} from "./state.js";
+import {hasDestination, items} from "./state.js";
 
 const props = defineProps(["item"]);
 /** @type {{filepath, filename, id, symlink}} */
 const item = props.item;
+
+function remove() {
+  items.value = items.value.filter(i => i !== item);
+}
 
 const symlinkNameElem = ref(null);
 const symlinkName = item.symlink;
@@ -34,7 +38,7 @@ async function onBlur() {
   let newName = symlinkNameElem.value.textContent;
   newName = newName
       .replaceAll("\n", "")
-      .replaceAll(/[/\\|]+/g, "")
+      .replaceAll(/[/\\|<>:"?*]+/g, "")
       .replaceAll(/^\s+/g, "")
       .replaceAll(/[.\s]+$/g, "");
   symlinkNameElem.value.textContent = newName;
