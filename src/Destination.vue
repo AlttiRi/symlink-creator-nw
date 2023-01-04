@@ -11,7 +11,7 @@
           :multiple="false"
           :nwdirectory="true"
       >
-
+        <template v-slot:prompt><FileInputPromptText :state="descFileInputState"/></template>
       </FileInput>
     </div>
 
@@ -22,6 +22,7 @@
 <script setup>
 import FileInput from "./file-input/FileInput.vue";
 import {clearDestination, descFileInputState, destDirectoryFullPath, hasDestination} from "./state.js";
+import FileInputPromptText from "./FileInputPromptText.vue";
 
 function onClick() {
   clearDestination();

@@ -1,7 +1,9 @@
 <template>
   <div class="target-file-select">
     <div></div>
-    <div class="file-input"><FileInput :state="targetFileInputState" :global-drop-zone="false"/></div>
+    <div class="file-input">
+      <FileInput :state="targetFileInputState" :global-drop-zone="false"/>
+    </div>
   </div>
 </template>
 
