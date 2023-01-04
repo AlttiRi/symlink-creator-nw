@@ -2,7 +2,7 @@
   <div class="content-line">
 
     <div class="line-1 buttons">
-      <button :disabled="!hasDestination">Create</button>
+      <button @click="create" :disabled="!hasDestination">Create</button>
       <button @click="remove">Remove</button>
     </div>
 
@@ -27,6 +27,10 @@ const item = props.item;
 
 function remove() {
   items.value = items.value.filter(i => i !== item);
+}
+
+function create() {
+  console.log("create");
 }
 
 const symlinkNameElem = ref(null);
