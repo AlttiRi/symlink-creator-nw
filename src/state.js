@@ -16,6 +16,13 @@ export const descFileInputState = getStateInstance({recursive: false});
 
 /**@type {import("vue").ComputedRef<WebFileEntry>} */
 const destDirectory = ref(null);
+export function clearDestination() {
+    destDirectory.value = null;
+}
+
+export const hasDestination = computed(() => {
+    return Boolean(destDirectory.value);
+});
 
 watchEffect(() => {
     /** @type {WebFileEntry[]} */

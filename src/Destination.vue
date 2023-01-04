@@ -1,8 +1,8 @@
 <template>
   <div class="destination">
 
-    <h2 class="title" style="grid-area: title;">Destination directory</h2>
-    <div class="clear-button" style="grid-area: clear;" tabindex="0">Clear</div>
+    <h2 class="title" :class="{gray: !hasDestination}" style="grid-area: title;">Destination directory</h2>
+    <div class="clear-button" :class="{gray: !hasDestination}" @click="onClick" style="grid-area: clear;" tabindex="0">Clear</div>
 
     <div class="file-input-wrapper" style="grid-area: file-input;">
       <FileInput
@@ -15,18 +15,25 @@
       </FileInput>
     </div>
 
-    <div class="destination-path" style="grid-area: path;">C:/example/new-folder</div>
+    <div class="destination-path" style="grid-area: path;">{{destDirectoryFullPath}}</div>
   </div>
 </template>
 
 <script setup>
 import FileInput from "./file-input/FileInput.vue";
-import {descFileInputState} from "./state.js";
+import {clearDestination, descFileInputState, destDirectoryFullPath, hasDestination} from "./state.js";
 
+function onClick() {
+  clearDestination();
+}
 
 </script>
 
 <style scoped lang="scss">
+
+.gray {
+  color: gray;
+}
 
 h2 {
   margin: 0;

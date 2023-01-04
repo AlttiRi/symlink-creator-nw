@@ -2,7 +2,7 @@
   <div class="content-line">
 
     <div class="line-1 buttons">
-      <button>Create</button>
+      <button :disabled="!hasDestination">Create</button>
       <button>Remove</button>
     </div>
 
@@ -19,6 +19,7 @@
 
 <script setup>
 import {ref} from "vue";
+import {hasDestination} from "./state.js";
 
 const props = defineProps(["item"]);
 /** @type {{filepath, filename, id, symlink}} */
