@@ -7,7 +7,7 @@
     <div class="file-input-wrapper" style="grid-area: file-input;">
       <FileInput
           :state="descFileInputState"
-          :global-drop-zone="false"
+          :drop-zone-selector="'.destination'"
           :multiple="false"
           :nwdirectory="true"
       >

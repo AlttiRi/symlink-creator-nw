@@ -43,6 +43,9 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
+  dropZoneSelector: {
+    type: String
+  },
   accept: {
     type: String,
     default: "*/*"
@@ -61,7 +64,9 @@ const props = defineProps({
 });
 const {
   /** @type {import("vue").Ref<Boolean>} */
-  globalDropZone
+  globalDropZone,
+  /** @type {import("vue").Ref<String>} */
+  dropZoneSelector,
 } = toRefs(props);
 
 /** @type {FileInputState} */
@@ -88,9 +93,12 @@ function onFileInputChange(event) {
 const fileInputElem = ref(null);
 /** @type {import("vue").Ref<HTMLElement>} */
 const dropZone = computed(() => {
+  if (dropZoneSelector.value) {
+    return document.querySelector(dropZoneSelector.value);
+  } else
   if (globalDropZone.value) {
     return document.body;
-  }
+  } else
   return fileInputElem.value;
 });
 onMounted(() => {

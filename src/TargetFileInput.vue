@@ -2,13 +2,12 @@
   <div class="target-file-select">
     <div></div>
     <div class="file-input">
-      <FileInput :state="targetFileInputState" :global-drop-zone="false"/>
+      <FileInput :state="targetFileInputState" :drop-zone-selector="'.main-content'"/>
     </div>
   </div>
 </template>
 
 <script setup>
-
 import FileInput from "./file-input/FileInput.vue";
 import {targetFileInputState} from "./state.js";
 </script>

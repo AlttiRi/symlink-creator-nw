@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="main-content">
       <ContentLine v-for="item of items" :item="item" :key="item.id"/>
       <TargetFileInput/>
   </div>
@@ -13,7 +13,7 @@ import TargetFileInput from "./TargetFileInput.vue";
 </script>
 
 <style scoped>
-.content {
+.main-content {
   width: 100%;
 }
 </style>
