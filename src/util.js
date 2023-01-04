@@ -84,3 +84,26 @@ export function isString(input) {
 export function firefoxDateFix(dateValue) {
     return isString(dateValue) ? dateValue.replace(/(?<y>\d{4})\.(?<m>\d{2})\.(?<d>\d{2})/, "$<y>-$<m>-$<d>") : dateValue;
 }
+
+
+export const setImmediate = globalThis.setImmediate || /*#__PURE__*/ (function() {
+    const {port1, port2} = new MessageChannel();
+    const queue = [];
+
+    port1.onmessage = function() {
+        const callback = queue.shift();
+        callback();
+    };
+
+    return function(callback) {
+        port2.postMessage(null);
+        queue.push(callback);
+    };
+})();
+
+export function sleep(ms) {
+    if (ms === undefined) {
+        return new Promise(resolve => setImmediate(resolve));
+    }
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
