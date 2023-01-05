@@ -90,3 +90,5 @@ if (!isNW) {
     addItem({filepath: "F:/fake-path/demo-filepath-2/demo-filename2.txt", filename: "demo-filename2.txt"});
     addItem({filepath: "F:/fake-path/demo-filepath-3/demo-filename3.txt", filename: "demo-filename3.txt"});
 }
+
+export const useRelPath = ref(false);

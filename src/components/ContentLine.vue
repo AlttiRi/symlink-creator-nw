@@ -19,7 +19,7 @@
 
 <script setup>
 import {ref} from "vue";
-import {destDirectoryFullPath, hasDestination, items} from "../state.js";
+import {destDirectoryFullPath, hasDestination, items, useRelPath} from "../state.js";
 import {createSymlink} from "../symlink-creator.js";
 
 const props = defineProps(["item"]);
@@ -41,6 +41,7 @@ async function create() {
       destinationDirPath: destDirectoryFullPath.value,
       symlinkName: item.symlink,
       targetFullPath: item.filepath,
+      relative: useRelPath.value,
     });
     error.value = null;
   } catch (e) {
