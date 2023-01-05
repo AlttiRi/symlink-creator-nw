@@ -1,6 +1,7 @@
 import {ref, computed, watchEffect, toRaw, readonly} from "vue";
 import {WebFileEntry} from "./WebFileEntry.js";
 
+const isNW = typeof nw !== "undefined" && nw.process?.["__nwjs"] === 1;
 
 /**
  * @typedef {Object} FileInputStatePrivate
@@ -46,6 +47,9 @@ export function getStateInstance({recursive} = {}) {
     /** @type {import("vue").Ref<String[]>} */
     const dropHoverTypes = ref([]);
 
+    /** @type {import("vue").Ref<Boolean>} */
+    const isNwDirectory = ref(false);
+
     /** @type {import("vue").Ref<WebFileEntry[]>} */
     const fileEntries = ref([]);
     /** @type {import("vue").Ref<Boolean>} */
@@ -56,6 +60,10 @@ export function getStateInstance({recursive} = {}) {
         if (dataTransfer.value) {
             console.log("[fromDataTransferItems]");
             fileEntries.value = await WebFileEntry.fromDataTransfer(dataTransfer.value, recursive);
+        } else
+        if (isNW && isNwDirectory.value) {
+            console.log("[isNwDirectory]");
+            fileEntries.value = WebFileEntry.fromFiles(files.value, "folder");
         } else {
             console.log("[fromFiles]");
             fileEntries.value = WebFileEntry.fromFiles(files.value);
@@ -134,6 +142,7 @@ export function getStateInstance({recursive} = {}) {
             file, count,
             setDataTransferHover, resetDataTransferHover,
             setDataTransfer, setFiles,
+            isNwDirectory,
         }
     };
 }

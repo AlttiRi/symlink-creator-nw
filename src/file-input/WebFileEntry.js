@@ -133,13 +133,14 @@ export class WebFileEntry {
 
     /**
      * @param {File[]} files
+     * @param {"file"|"folder"} type
      * @return {WebFileEntry[]}
      */
-    static fromFiles(files) {
+    static fromFiles(files, type= "file") {
         /** @type {WebFileEntry[]} */
         const result = [];
         for (const file of files) {
-            result.push(new WebFileEntry({file, type: "file"}));
+            result.push(new WebFileEntry({file, type}));
         }
         return result;
     }

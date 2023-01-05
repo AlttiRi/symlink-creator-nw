@@ -36,7 +36,7 @@
 import FileInputDefaultHoverText from "./FileInputDefaultHoverText.vue";
 import FileInputDefaultText from "./FileInputDefaultText.vue";
 
-import {ref, toRefs, onMounted, computed, onBeforeUnmount} from "vue";
+import {ref, toRefs, onMounted, computed, onBeforeUnmount, watchEffect} from "vue";
 
 const props = defineProps({
   globalDropZone: {
@@ -67,6 +67,8 @@ const {
   globalDropZone,
   /** @type {import("vue").Ref<String>} */
   dropZoneSelector,
+  /** @type {import("vue").Ref<Boolean>} */
+  nwdirectory,
 } = toRefs(props);
 
 /** @type {FileInputState} */
@@ -79,7 +81,12 @@ const {
   setDataTransfer,
   setDataTransferHover,
   resetDataTransferHover,
+  isNwDirectory,
 } = state.private;
+
+watchEffect(() => {
+  isNwDirectory.value = nwdirectory.value;
+});
 
 /** @param {Event} event */
 function onFileInputChange(event) {

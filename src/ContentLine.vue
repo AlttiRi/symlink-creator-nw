@@ -58,13 +58,16 @@ async function onBlur() {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+$gap-w: 5px;
+
 .content-line {
   display: grid;
   grid-template-columns:  50% 50%;
   grid-template-rows: auto auto;
-  gap: 5px 5px;
+  gap: 5px $gap-w;
   padding-bottom: 15px;
+  max-width: calc(100% - $gap-w);
 }
 
 .line-1 {

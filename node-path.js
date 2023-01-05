@@ -7,6 +7,9 @@ if (typeof require !== "undefined") {
         join(a, b) {
             console.log("[dummy] path.join:", a, b);
             return a + "/" + b;
+        },
+        relative() {
+
         }
     }
 }

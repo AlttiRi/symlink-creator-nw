@@ -13,16 +13,18 @@ import {targetFileInputState} from "./state.js";
 </script>
 
 <style scoped lang="scss">
+$gap-w: 5px;
+
 .target-file-select {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: auto;
-  gap: 5px 5px;
+  gap: 5px $gap-w;
   padding-bottom: 15px;
 }
 .target-file-select {
   height: 100%;
-  width: 100%;
+  width: calc(100% - $gap-w);
   min-height: 40px;
 }
 </style>
