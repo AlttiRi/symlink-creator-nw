@@ -10,6 +10,9 @@ if (typeof require !== "undefined") {
                 dummy: "fs.stat",
                 size: 1234567890
             };
+        },
+        async symlink(target, path, type = null) {
+            console.log("[dummy] fs.symlink:", target, path);
         }
     }
 }
