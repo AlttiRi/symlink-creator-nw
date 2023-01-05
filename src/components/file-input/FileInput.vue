@@ -109,9 +109,6 @@ const dropZone = computed(() => {
   return fileInputElem.value;
 });
 onMounted(() => {
-  if (!globalDropZone.value) {
-    disableDragOverNotDropZone();
-  }
   initListeners();
 });
 onBeforeUnmount(() => {
@@ -128,12 +125,16 @@ function initListeners() {
   dropZone.value.addEventListener("dragover", onDragOver);
   dropZone.value.addEventListener("dragleave", onDragLeave);
   dropZone.value.addEventListener("dragenter", onDragEnter);
+
+  document.body.addEventListener("dragover", dragOverCallback);
 }
 function removeListeners() {
   dropZone.value.removeEventListener("drop", onDrop);
   dropZone.value.removeEventListener("dragover", onDragOver);
   dropZone.value.removeEventListener("dragleave", onDragLeave);
   dropZone.value.removeEventListener("dragenter", onDragEnter);
+
+  document.body.removeEventListener("dragover", dragOverCallback);
 }
 function onDrop(event) {
   stopEvent(event);
@@ -161,15 +162,12 @@ function onDragLeave(event) {
   }
 }
 
-function disableDragOverNotDropZone() {
-  /** @param {DragEvent} event */
-  const dragOverCallback = event => {
-    if (!dropZone.value.contains(event.target)) {
-      stopEvent(event);
-      event.dataTransfer.dropEffect = "none";
-    }
-  };
-  document.body.addEventListener("dragover", dragOverCallback);
+/** @param {DragEvent} event */
+function dragOverCallback(event) {
+  if (!dropZone.value.contains(event.target)) {
+    stopEvent(event);
+    event.dataTransfer.dropEffect = "none";
+  }
 }
 
 function onKeyDown(event) {
