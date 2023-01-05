@@ -49,6 +49,8 @@ export function getStateInstance({recursive} = {}) {
 
     /** @type {import("vue").Ref<Boolean>} */
     const isNwDirectory = ref(false);
+    /** @type {import("vue").Ref<HTMLInputElement>} */
+    const inputElem = ref(null);
 
     /** @type {import("vue").Ref<WebFileEntry[]>} */
     const fileEntries = ref([]);
@@ -128,6 +130,7 @@ export function getStateInstance({recursive} = {}) {
     }
 
     function clearInput() {
+        inputElem.value.value = null;
         files.value = [];
         dataTransfer.value = null;
         dtItems.value = [];
@@ -143,6 +146,7 @@ export function getStateInstance({recursive} = {}) {
             setDataTransferHover, resetDataTransferHover,
             setDataTransfer, setFiles,
             isNwDirectory,
+            inputElem,
         }
     };
 }

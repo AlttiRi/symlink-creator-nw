@@ -149,11 +149,11 @@ export class WebFileEntry {
 /**
  * @param {FileSystemEntry} fsEntry
  * @param {WebFileEntry|null} parent
- * @param {boolean} recursive=true
+ * @param {boolean} recursive=false
  * @param {File} [file]
  * @return {Promise<WebFileEntry|null>}
  */
-async function fromFileSystemEntry(fsEntry, parent = null, recursive = true, file) {
+async function fromFileSystemEntry(fsEntry, parent = null, recursive = false, file) {
     if (fsEntry.isFile) {
         try {
             const file = await toFile(/** @type {FileSystemFileEntry} */ fsEntry);

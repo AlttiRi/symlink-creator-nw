@@ -13,6 +13,7 @@
            @change="onFileInputChange"
            style="display: none"
            :nwdirectory="nwdirectory"
+           ref="templateInputElem"
     >
 
     <span class="content hover" v-if="dropHover">
@@ -37,6 +38,9 @@ import FileInputDefaultHoverText from "./FileInputDefaultHoverText.vue";
 import FileInputDefaultText from "./FileInputDefaultText.vue";
 
 import {ref, toRefs, onMounted, computed, onBeforeUnmount, watchEffect} from "vue";
+
+/** @type {import("vue").Ref<HTMLInputElement>} */
+const templateInputElem = ref(null);
 
 const props = defineProps({
   globalDropZone: {
@@ -82,11 +86,16 @@ const {
   setDataTransferHover,
   resetDataTransferHover,
   isNwDirectory,
+  inputElem,
 } = state.private;
 
 watchEffect(() => {
   isNwDirectory.value = nwdirectory.value;
 });
+watchEffect(() => {
+  inputElem.value = templateInputElem.value;
+});
+
 
 /** @param {Event} event */
 function onFileInputChange(event) {
