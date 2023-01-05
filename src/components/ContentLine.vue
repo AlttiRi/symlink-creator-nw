@@ -46,6 +46,7 @@ async function create() {
     error.value = null;
   } catch (e) {
     error.value = e;
+    console.error(e);
   }
 }
 
