@@ -1,6 +1,6 @@
 import {computed, ref, toRaw, watchEffect} from "vue";
-import {getStateInstance} from "./file-input/file-input-state.js";
-import fs from "../node-fs.js";
+import {getStateInstance} from "./components/file-input/file-input-state.js";
+import fs from "./node-api/node-fs.js";
 
 
 export const isNW = typeof nw !== "undefined";

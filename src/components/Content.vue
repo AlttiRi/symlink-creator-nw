@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import {items} from "./state.js";
+import {items} from "../state.js";
 import ContentLine from "./ContentLine.vue";
 import TargetFileInput from "./TargetFileInput.vue";
 

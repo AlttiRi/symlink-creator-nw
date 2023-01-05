@@ -9,7 +9,7 @@
 
 <script setup>
 import FileInput from "./file-input/FileInput.vue";
-import {targetFileInputState} from "./state.js";
+import {targetFileInputState} from "../state.js";
 </script>
 
 <style scoped lang="scss">

@@ -19,8 +19,8 @@
 
 <script setup>
 import {ref} from "vue";
-import {destDirectoryFullPath, hasDestination, items} from "./state.js";
-import {createSymlink} from "./symlink-creator.js";
+import {destDirectoryFullPath, hasDestination, items} from "../state.js";
+import {createSymlink} from "../symlink-creator.js";
 
 const props = defineProps(["item"]);
 /** @type {{filepath, filename, id, symlink}} */

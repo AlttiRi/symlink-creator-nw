@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import {bytesToSizeWinLike, dateToDayDateTimeString} from "../util.js";
+import {bytesToSizeWinLike, dateToDayDateTimeString} from "../../util.js";
 const props = defineProps(["state"]);
 const {file} = props.state.private;
 </script>

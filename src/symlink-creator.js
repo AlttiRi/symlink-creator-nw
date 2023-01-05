@@ -1,5 +1,5 @@
-import fs from "/node-fs.js";
-import path from "/node-path.js";
+import fs   from "./node-api/node-fs.js";
+import path from "./node-api/node-path.js";
 
 export async function createSymlink({
     destinationDirPath,
