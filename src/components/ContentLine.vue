@@ -2,7 +2,7 @@
   <div class="content-line">
 
     <div class="line-1 buttons">
-      <button @click="create" :disabled="!hasDestination">Create</button>
+      <button @click="create" :disabled="!hasDestination" :title="error">Create</button>
       <button @click="remove">Remove</button>
     </div>
 
@@ -34,12 +34,18 @@ function remove() {
 const symlinkNameElem = ref(null);
 const symlinkName = item.symlink;
 
-function create() {
-  void createSymlink({
-    destinationDirPath: destDirectoryFullPath.value,
-    symlinkName: item.symlink,
-    targetFullPath: item.filepath,
-  });
+const error = ref(null);
+async function create() {
+  try {
+    await createSymlink({
+      destinationDirPath: destDirectoryFullPath.value,
+      symlinkName: item.symlink,
+      targetFullPath: item.filepath,
+    });
+    error.value = null;
+  } catch (e) {
+    error.value = e;
+  }
 }
 
 
