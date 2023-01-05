@@ -15,4 +15,6 @@ export async function createSymlink({
 
     const symlinkFullPath = path.join(destinationDirPath, symlinkName);
     console.log(symlinkFullPath);
+
+    await fs.symlink(targetFullPath, symlinkFullPath);
 }

@@ -12,7 +12,7 @@ if (typeof require !== "undefined") {
             };
         },
         async symlink(target, path, type = null) {
-            console.log("[dummy] fs.symlink:", target, path);
+            console.log("[dummy] fs.symlink:", {target, path});
         }
     }
 }
