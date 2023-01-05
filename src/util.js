@@ -107,3 +107,16 @@ export function sleep(ms) {
     }
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+/**
+ * Quick and simple implementation.
+ * @param {String} filename
+ * @return {String}
+ */
+export function windowsFilename(filename) {
+    return filename
+        .replaceAll("\n", "")
+        .replaceAll(/[/\\|<>:"?*]+/g, "")
+        .replaceAll(/^\s+/g, "")
+        .replaceAll(/[.\s]+$/g, "");
+}

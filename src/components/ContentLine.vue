@@ -21,6 +21,7 @@
 import {ref} from "vue";
 import {destDirectoryFullPath, hasDestination, items, useRelPath} from "../state.js";
 import {createSymlink} from "../symlink-creator.js";
+import {windowsFilename} from "../util.js";
 
 const props = defineProps(["item"]);
 /** @type {{filepath, filename, id, symlink}} */
@@ -55,11 +56,8 @@ async function onBlur() {
   console.log("onBlur");
 
   let newName = symlinkNameElem.value.textContent;
-  newName = newName
-      .replaceAll("\n", "")
-      .replaceAll(/[/\\|<>:"?*]+/g, "")
-      .replaceAll(/^\s+/g, "")
-      .replaceAll(/[.\s]+$/g, "");
+  newName = windowsFilename(newName);
+
   symlinkNameElem.value.textContent = newName;
   item.symlink = newName;
 }
