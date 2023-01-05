@@ -81,8 +81,12 @@ async function appendEntries(entries) {
     }
 }
 
+export function clearTargets() {
+    items.value = [];
+}
+
 if (!isNW) {
-    addItem({filepath: "demo-filepath-1/demo-filename1.txt", filename: "demo-filename1.txt"});
-    addItem({filepath: "demo-filepath-2/demo-filename2.txt", filename: "demo-filename2.txt"});
-    addItem({filepath: "demo-filepath-3/demo-filename3.txt", filename: "demo-filename3.txt"});
+    addItem({filepath: "F:/fake-path/demo-filepath-1/demo-filename1.txt", filename: "demo-filename1.txt"});
+    addItem({filepath: "F:/fake-path/demo-filepath-2/demo-filename2.txt", filename: "demo-filename2.txt"});
+    addItem({filepath: "F:/fake-path/demo-filepath-3/demo-filename3.txt", filename: "demo-filename3.txt"});
 }

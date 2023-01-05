@@ -2,13 +2,16 @@
   <div class="target-file-select">
     <div></div>
     <div class="file-input">
-      <FileInput :state="targetFileInputState" :drop-zone-selector="'.main-content'"/>
+      <FileInput :state="targetFileInputState" :drop-zone-selector="'.main-content'">
+        <template v-slot:prompt><FileInputPromptText_Targ :state="targetFileInputState"/></template>
+      </FileInput>
     </div>
   </div>
 </template>
 
 <script setup>
 import FileInput from "./file-input/FileInput.vue";
+import FileInputPromptText_Targ from "./FileInputPromptText_Targ.vue";
 import {targetFileInputState} from "../state.js";
 </script>
 

@@ -2,7 +2,7 @@
   <div class="destination">
 
     <h2 class="title" :class="{gray: !hasDestination}" style="grid-area: title;">Destination directory</h2>
-    <div class="clear-button" :class="{gray: !hasDestination}" @click="onClick" style="grid-area: clear;" tabindex="0">Clear</div>
+    <div class="clear-button" :class="{gray: !hasDestination}" @click="onClearClick" style="grid-area: clear;" tabindex="0">Clear</div>
 
     <div class="file-input-wrapper" style="grid-area: file-input;">
       <FileInput
@@ -21,11 +21,12 @@
 
 <script setup>
 import FileInput from "./file-input/FileInput.vue";
-import {clearDestination, descFileInputState, destDirectoryFullPath, hasDestination} from "../state.js";
-import FileInputPromptText from "./FileInputPromptText.vue";
+import {clearDestination, clearTargets, descFileInputState, destDirectoryFullPath, hasDestination} from "../state.js";
+import FileInputPromptText from "./FileInputPromptText_Dest.vue";
 
-function onClick() {
+function onClearClick() {
   clearDestination();
+  clearTargets();
 }
 
 </script>
