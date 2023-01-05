@@ -19,7 +19,8 @@
 
 <script setup>
 import {ref} from "vue";
-import {hasDestination, items} from "./state.js";
+import {destDirectoryFullPath, hasDestination, items} from "./state.js";
+import {createSymlink} from "./symlink-creator.js";
 
 const props = defineProps(["item"]);
 /** @type {{filepath, filename, id, symlink}} */
@@ -29,12 +30,18 @@ function remove() {
   items.value = items.value.filter(i => i !== item);
 }
 
-function create() {
-  console.log("create");
-}
 
 const symlinkNameElem = ref(null);
 const symlinkName = item.symlink;
+
+function create() {
+  void createSymlink({
+    destinationDirPath: destDirectoryFullPath.value,
+    symlinkName: item.symlink,
+    targetFullPath: item.filepath,
+  });
+}
+
 
 async function onBlur() {
   console.log("onBlur");

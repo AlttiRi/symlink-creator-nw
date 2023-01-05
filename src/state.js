@@ -75,6 +75,8 @@ async function appendEntries(entries) {
     }
 }
 
-addItem({filepath: "demo-filepath-1/demo-filename1.txt", filename: "demo-filename1.txt"});
-addItem({filepath: "demo-filepath-2/demo-filename2.txt", filename: "demo-filename2.txt"});
-addItem({filepath: "demo-filepath-3/demo-filename3.txt", filename: "demo-filename3.txt"});
+if (!isNW) {
+    addItem({filepath: "demo-filepath-1/demo-filename1.txt", filename: "demo-filename1.txt"});
+    addItem({filepath: "demo-filepath-2/demo-filename2.txt", filename: "demo-filename2.txt"});
+    addItem({filepath: "demo-filepath-3/demo-filename3.txt", filename: "demo-filename3.txt"});
+}
