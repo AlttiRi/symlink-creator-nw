@@ -39,7 +39,7 @@ export const destDirectoryFullPath = computed(() => {
     if (!destDirectory.value) {
         return;
     }
-    return destDirectory.value.nativePath || (!isNW && ".../demo/" + destDirectory.value.name);
+    return destDirectory.value.nativePath || (!isNW && "C://.../demo/" + destDirectory.value.name);
 });
 
 
@@ -71,7 +71,13 @@ async function appendEntries(entries) {
         const filename = entry.name;
         const filepath = isNW ? entry.nativePath : "F:/fake-path/" + filename;
         addItem({filepath, filename});
-        console.log(await fs.stat(filepath));
+
+        const stat = await fs.lstat(filepath);
+        const isSymbolicLink = stat.isSymbolicLink();
+        console.log("[isSymbolicLink]:", stat.isSymbolicLink());
+        if (isSymbolicLink) {
+            console.log("[readlink]:", await fs.readlink(filepath));
+        }
     }
 }
 

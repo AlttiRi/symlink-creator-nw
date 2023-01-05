@@ -4,12 +4,13 @@ if (typeof require !== "undefined") {
     path = require("node:path");
 } else {
     path = {
-        join(a, b) {
-            console.log("[dummy] path.join:", a, b);
-            return a + "/" + b;
+        join(...paths) {
+            console.log("[dummy] path.join:", ...paths);
+            return paths.join("/");
         },
-        relative() {
-
+        relative(from, to) {
+            console.log("[dummy] path.relative:", from, to);
+            return "rel:" + "../../" + to;
         }
     }
 }
