@@ -3,6 +3,10 @@ declare enum WebFileEntryType {
     folder = "folder",
 }
 
+export declare class NWFile extends File {
+    public path: string
+}
+
 export declare class WebFileEntry implements Iterable<WebFileEntry> {
     public type?:     WebFileEntryType
     public file?:     File

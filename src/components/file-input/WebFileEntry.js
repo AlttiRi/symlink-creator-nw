@@ -1,19 +1,14 @@
-export const WebFileEntryType = {
-    file:   "file",
-    folder: "folder",
-};
-
 export class WebFileEntry {
     /**
      * @param {Object} init
      * @param {"file"|"folder"} init.type
-     * @param {File?} init.file
+     * @param {NWFile|File?} init.file
      * @param {WebFileEntry?} init.parent
      * @param {String?} init.name
      */
     constructor({file, parent, type, name}) {
         if (file) {
-            /** @type {File|undefined} */
+            /** @type {NWFile|File|undefined} */
             this.file = file;
         }
         if (parent) {
