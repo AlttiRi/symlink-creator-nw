@@ -2,10 +2,15 @@
   <div class="default-hover-text">{{text}}</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {computed} from "vue";
-const props = defineProps(["state"]);
-const {dropHoverItemCount} = props.state.private;
+import {FileInputState} from "./file-input-state";
+
+const props = defineProps<{state: FileInputState}>();
+const {
+  dropHoverItemCount
+} = props.state.private;
+
 const text = computed(() => {
   const postfix = dropHoverItemCount.value > 1 ? "s" : "";
   return `Drop ${dropHoverItemCount.value} file${postfix}`;

@@ -33,14 +33,17 @@
 </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import FileInputDefaultHoverText from "./FileInputDefaultHoverText.vue";
 import FileInputDefaultText from "./FileInputDefaultText.vue";
+import {FileInputState} from "./file-input-state";
 
-import {ref, toRefs, onMounted, computed, onBeforeUnmount, watchEffect} from "vue";
+import {
+  ref, toRefs, onMounted, computed, onBeforeUnmount, watchEffect,
+  PropType, Ref, ComputedRef
+} from "vue";
 
-/** @type {import("vue").Ref<HTMLInputElement>} */
-const templateInputElem = ref(null);
+const templateInputElem: Ref<HTMLInputElement> = ref(null);
 
 const props = defineProps({
   globalDropZone: {
@@ -59,6 +62,7 @@ const props = defineProps({
     default: true
   },
   state: {
+    type: Object as PropType<FileInputState>,
     required: true
   },
   nwdirectory: {
@@ -66,17 +70,13 @@ const props = defineProps({
     default: false
   }
 });
+
 const {
-  /** @type {import("vue").Ref<Boolean>} */
   globalDropZone,
-  /** @type {import("vue").Ref<String>} */
   dropZoneSelector,
-  /** @type {import("vue").Ref<Boolean>} */
   nwdirectory,
 } = toRefs(props);
 
-/** @type {FileInputState} */
-const state = props.state;
 const {
   parsing,
   file,
@@ -87,7 +87,8 @@ const {
   resetDataTransferHover,
   isNwDirectory,
   inputElem,
-} = state.private;
+} = props.state.private;
+
 
 watchEffect(() => {
   isNwDirectory.value = nwdirectory.value;
@@ -96,19 +97,14 @@ watchEffect(() => {
   inputElem.value = templateInputElem.value;
 });
 
-
-/** @param {Event} event */
-function onFileInputChange(event) {
-  /** @type {HTMLInputElement} */
-  const fileElem = event.target;
+function onFileInputChange(event: Event) {
+  const fileElem = event.target as HTMLInputElement;
   setFiles(fileElem.files);
 }
 
+const fileInputElem: Ref<HTMLElement> = ref(null);
 
-/** @type {import("vue").Ref<HTMLElement|null>} */
-const fileInputElem = ref(null);
-/** @type {import("vue").Ref<HTMLElement>} */
-const dropZone = computed(() => {
+const dropZone: ComputedRef<HTMLElement> = computed(() => {
   if (dropZoneSelector.value) {
     return document.querySelector(dropZoneSelector.value);
   } else
@@ -117,17 +113,13 @@ const dropZone = computed(() => {
   } else
   return fileInputElem.value;
 });
+
 onMounted(() => {
   initListeners();
 });
 onBeforeUnmount(() => {
   removeListeners();
 });
-
-function stopEvent(event) {
-  event.preventDefault();
-  event.stopPropagation();
-}
 
 function initListeners() {
   dropZone.value.addEventListener("drop", onDrop);
@@ -145,16 +137,22 @@ function removeListeners() {
 
   document.body.removeEventListener("dragover", dragOverCallback);
 }
-function onDrop(event) {
+
+function stopEvent(event: Event) {
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+function onDrop(event: DragEvent) {
   stopEvent(event);
   dropHover.value = false;
   setDataTransfer(event.dataTransfer);
 }
-function onDragOver(event) {
+function onDragOver(event: DragEvent) {
   stopEvent(event);
   event.dataTransfer.dropEffect = "copy";
 }
-function onDragEnter(event) {
+function onDragEnter(event: DragEvent) {
   stopEvent(event);
   if (!dropHover.value) {
     dropHover.value = true;
@@ -163,23 +161,22 @@ function onDragEnter(event) {
   }
   setDataTransferHover(event.dataTransfer);
 }
-function onDragLeave(event) {
+function onDragLeave(event: DragEvent) {
   stopEvent(event);
-  if (!dropZone.value.contains(event.relatedTarget)) {
+  if (!dropZone.value.contains(event.relatedTarget as Node)) {
     dropHover.value = false;
     resetDataTransferHover();
   }
 }
 
-/** @param {DragEvent} event */
-function dragOverCallback(event) {
-  if (!dropZone.value.contains(event.target)) {
+function dragOverCallback(event: DragEvent) {
+  if (!dropZone.value.contains(event.target as Node)) {
     stopEvent(event);
     event.dataTransfer.dropEffect = "none";
   }
 }
 
-function onKeyDown(event) {
+function onKeyDown(event: KeyboardEvent) {
   if (event.key === "Enter") {
     fileInputElem.value.querySelector("label").click();
   }

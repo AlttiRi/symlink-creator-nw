@@ -1,10 +1,15 @@
+export const WebFileEntryType = {
+    file:   "file",
+    folder: "folder",
+};
+
 export class WebFileEntry {
     /**
      * @param {Object} init
-     * @param {File} [init.file]
      * @param {"file"|"folder"} init.type
-     * @param {WebFileEntry} [init.parent]
-     * @param {String} [init.name]
+     * @param {File?} init.file
+     * @param {WebFileEntry?} init.parent
+     * @param {String?} init.name
      */
     constructor({file, parent, type, name}) {
         if (file) {
@@ -136,7 +141,7 @@ export class WebFileEntry {
      * @param {"file"|"folder"} type
      * @return {WebFileEntry[]}
      */
-    static fromFiles(files, type= "file") {
+    static fromFiles(files, type = "file") {
         /** @type {WebFileEntry[]} */
         const result = [];
         for (const file of files) {

@@ -6,10 +6,14 @@
     </span>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {bytesToSizeWinLike, dateToDayDateTimeString} from "../../util.js";
-const props = defineProps(["state"]);
-const {file} = props.state.private;
+import {FileInputState} from "./file-input-state";
+
+const props = defineProps<{state: FileInputState}>();
+const {
+  file
+} = props.state.private;
 </script>
 
 <style lang="scss" scoped>

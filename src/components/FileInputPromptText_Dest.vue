@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import {hasDestination} from "../state.js";
+import {hasDestination} from "./state/core";
 </script>
 
 <style lang="scss" scoped>

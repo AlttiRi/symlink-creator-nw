@@ -21,7 +21,7 @@
 
 <script setup>
 import FileInput from "./file-input/FileInput.vue";
-import {clearDestination, clearTargets, descFileInputState, destDirectoryFullPath, hasDestination} from "../state.js";
+import {clearDestination, clearTargets, descFileInputState, destDirectoryFullPath, hasDestination} from "./state/core";
 import FileInputPromptText from "./FileInputPromptText_Dest.vue";
 
 function onClearClick() {

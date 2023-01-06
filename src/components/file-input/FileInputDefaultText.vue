@@ -8,10 +8,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {computed} from "vue";
-const props = defineProps(["state"]);
-const {count, fileEntries, parsing} = props.state.private;
+import {FileInputState} from "./file-input-state";
+
+const props = defineProps<{state: FileInputState}>();
+const {
+  count, fileEntries, parsing
+} = props.state.private;
+
 const names = computed(() => {
   /** @type {WebFileEntry[]} */
   const entries = fileEntries.value;

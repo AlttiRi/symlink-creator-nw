@@ -1,32 +1,34 @@
-import {computed, ref, toRaw, watchEffect} from "vue";
-import {getStateInstance} from "./components/file-input/file-input-state.js";
-import fs from "./node-api/node-fs.js";
+import {computed, ComputedRef, Ref, ref, toRaw, unref, watchEffect} from "vue";
+import {FileInputState, getStateInstance} from "../file-input/file-input-state";
+import fs from "../../node-api/node-fs.js";
+import {WebFileEntry} from "../file-input/WebFileEntry.js";
+import {Stats} from "fs";
 
 
-export const isNW = typeof nw !== "undefined";
+
+export const isNW: boolean = typeof nw !== "undefined" && nw["process"]?.["__nwjs"] === 1;
+
 if (isNW) {
-    nw.Window.get().showDevTools();
+    if (typeof process !== "undefined" && process.versions?.["nw-flavor"] === "sdk") {
+        nw.Window.get().showDevTools();
+    }
 }
 
 // -----------
 // FileInput 1
 // -----------
 
-export const descFileInputState = getStateInstance({recursive: false});
-
-/**@type {import("vue").ComputedRef<WebFileEntry>} */
-const destDirectory = ref(null);
+export const descFileInputState: FileInputState = getStateInstance({recursive: false});
+const destDirectory: Ref<WebFileEntry> = ref(null);
 export function clearDestination() {
     destDirectory.value = null;
 }
-
-export const hasDestination = computed(() => {
+export const hasDestination: ComputedRef<boolean> = computed(() => {
     return Boolean(destDirectory.value);
 });
 
 watchEffect(() => {
-    /** @type {WebFileEntry[]} */
-    const entries = toRaw(descFileInputState.fileEntries.value);
+    const entries: WebFileEntry[] = toRaw(descFileInputState.fileEntries.value) as WebFileEntry[];
     if (!entries.length) {
         return;
     }
@@ -35,7 +37,7 @@ watchEffect(() => {
     destDirectory.value = entries.find(e => e.type === "folder");
 });
 
-export const destDirectoryFullPath = computed(() => {
+export const destDirectoryFullPath: ComputedRef<string> = computed(() => {
     if (!destDirectory.value) {
         return;
     }
@@ -47,10 +49,9 @@ export const destDirectoryFullPath = computed(() => {
 // -----------
 // FileInput 2
 // -----------
-export const targetFileInputState = getStateInstance({recursive: false});
+export const targetFileInputState: FileInputState = getStateInstance({recursive: false});
 watchEffect(() => {
-    /** @type {WebFileEntry[]} */
-    const entries = toRaw(targetFileInputState.fileEntries.value);
+    const entries: WebFileEntry[] = toRaw(unref(targetFileInputState.fileEntries)) as WebFileEntry[];
     if (!entries.length) {
         return;
     }
@@ -59,20 +60,27 @@ watchEffect(() => {
     void appendEntries(entries);
 });
 
-export const items = ref([]);
-let id = 0;
-function addItem({filepath, filename}) {
+
+declare type Item = {
+    filepath: string,
+    filename: string,
+    id: number,
+    symlink: string,
+}
+
+export const items: Ref<Item[]> = ref([]);
+let id: number = 0;
+function addItem({filepath, filename}: {filepath: string, filename: string}) {
     items.value.push({filepath, filename, id: id++, symlink: filename});
 }
 
-/** @param {WebFileEntry[]} entries */
-async function appendEntries(entries) {
-    for (/** @type {WebFileEntry} */ const entry of entries) {
+async function appendEntries(entries: WebFileEntry[]) {
+    for (const entry of entries) {
         const filename = entry.name;
         const filepath = isNW ? entry.nativePath : "F:/fake-path/" + filename;
         addItem({filepath, filename});
 
-        const stat = await fs.lstat(filepath);
+        const stat = await fs.lstat(filepath) as Stats;
         const isSymbolicLink = stat.isSymbolicLink();
         console.log("[isSymbolicLink]:", stat.isSymbolicLink());
         if (isSymbolicLink) {
@@ -91,4 +99,4 @@ if (!isNW) {
     addItem({filepath: "F:/fake-path/demo-filepath-3/demo-filename3.txt", filename: "demo-filename3.txt"});
 }
 
-export const useRelPath = ref(false);
+export const useRelPath: Ref<boolean> = ref(false);

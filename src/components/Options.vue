@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import {useRelPath} from "../state.js";
+import {useRelPath} from "./state/core";
 </script>
 
 <style scoped>

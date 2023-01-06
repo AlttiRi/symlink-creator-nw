@@ -17,9 +17,9 @@
   <hr>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {ref} from "vue";
-import {destDirectoryFullPath, hasDestination, items, useRelPath} from "../state.js";
+import {destDirectoryFullPath, hasDestination, items, useRelPath} from "./state/core";
 import {createSymlink} from "../symlink-creator.js";
 import {windowsFilename} from "../util.js";
 
