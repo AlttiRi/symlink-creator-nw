@@ -2,13 +2,13 @@ export class WebFileEntry {
     /**
      * @param {Object} init
      * @param {"file"|"folder"} init.type
-     * @param {NWFile|File?} init.file
+     * @param {FileWithPath|File?} init.file
      * @param {WebFileEntry?} init.parent
      * @param {String?} init.name
      */
     constructor({file, parent, type, name}) {
         if (file) {
-            /** @type {NWFile|File|undefined} */
+            /** @type {FileWithPath|File|undefined} */
             this.file = file;
         }
         if (parent) {
@@ -25,7 +25,7 @@ export class WebFileEntry {
     }
 
     get nativePath() {
-        return this.file?.path;
+        return this.file?.["path"];
     }
 
     get name() {

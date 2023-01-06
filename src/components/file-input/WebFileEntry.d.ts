@@ -3,17 +3,17 @@ declare enum WebFileEntryType {
     folder = "folder",
 }
 
-export declare class NWFile extends File {
-    public path: string
+export interface FileWithPath extends File {
+    readonly path?: string;
 }
 
-export declare class WebFileEntry implements Iterable<WebFileEntry> {
-    public type?:     WebFileEntryType
-    public file?:     File
-    public parent?:   WebFileEntry
-    public children?: WebFileEntry[]
+export class WebFileEntry implements Iterable<WebFileEntry> {
+    public readonly type?:   WebFileEntryType
+    public readonly file?:   FileWithPath | File
+    public readonly parent?: WebFileEntry
+    private readonly _name:  string
 
-    private _name:        string
+    public children?: WebFileEntry[]
     private _contentSize: number
 
     constructor(opts: {
