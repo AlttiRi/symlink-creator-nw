@@ -1,3 +1,8 @@
+export const WebFileEntryType = {
+    file:   "file",
+    folder: "folder",
+};
+
 export class WebFileEntry {
     /**
      * @param {Object} init
