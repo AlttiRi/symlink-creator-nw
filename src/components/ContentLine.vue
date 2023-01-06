@@ -18,24 +18,22 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
-import {destDirectoryFullPath, hasDestination, items, useRelPath} from "./state/core";
+import {ref, Ref} from "vue";
+import {destDirectoryFullPath, hasDestination, items, useRelPath, SymlinkInfoItem} from "./state/core";
 import {createSymlink} from "../symlink-creator.js";
 import {windowsFilename} from "../util.js";
 
 const props = defineProps(["item"]);
-/** @type {{filepath, filename, id, symlink}} */
-const item = props.item;
+const item: SymlinkInfoItem = props.item;
 
 function remove() {
   items.value = items.value.filter(i => i !== item);
 }
 
+const symlinkNameElem: Ref<HTMLElement> = ref(null);
+const symlinkName: string = item.symlink;
+const error: Ref<string> = ref(null);
 
-const symlinkNameElem = ref(null);
-const symlinkName = item.symlink;
-
-const error = ref(null);
 async function create() {
   try {
     await createSymlink({
@@ -61,7 +59,6 @@ async function onBlur() {
   symlinkNameElem.value.textContent = newName;
   item.symlink = newName;
 }
-
 </script>
 
 <style lang="scss" scoped>
