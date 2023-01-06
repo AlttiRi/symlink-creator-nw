@@ -8,10 +8,10 @@ export interface FileWithPath extends File {
 }
 
 export class WebFileEntry implements Iterable<WebFileEntry> {
-    public readonly type?:   WebFileEntryType
-    public readonly file?:   FileWithPath | File
-    public readonly parent?: WebFileEntry
-    private readonly _name:  string
+    public  readonly type?:   WebFileEntryType
+    public  readonly file?:   FileWithPath | File
+    public  readonly parent?: WebFileEntry
+    private readonly _name:   string
 
     public children?: WebFileEntry[]
     private _contentSize: number
