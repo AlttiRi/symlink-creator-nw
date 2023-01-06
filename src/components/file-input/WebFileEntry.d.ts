@@ -3,13 +3,6 @@ declare enum WebFileEntryType {
     folder = "folder",
 }
 
-interface IWebFileEntryOpts {
-    file?: File,
-    parent?: WebFileEntry,
-    type: WebFileEntryType,
-    name?: string
-}
-
 export declare class WebFileEntry implements Iterable<WebFileEntry> {
     public type?:     WebFileEntryType
     public file?:     File
@@ -19,7 +12,13 @@ export declare class WebFileEntry implements Iterable<WebFileEntry> {
     private _name:        string
     private _contentSize: number
 
-    constructor(opts: IWebFileEntryOpts)
+    constructor(opts: {
+        file?: File,
+        parent?: WebFileEntry,
+        type: WebFileEntryType,
+        name?: string
+    })
+
     get nativePath(): string | undefined
     get name(): string | undefined
     private addChild(entry: WebFileEntry)
