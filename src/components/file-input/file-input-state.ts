@@ -26,7 +26,7 @@ export type FileInputState = {
     private: FileInputStatePrivate,
 }
 
-
+declare const nw: any
 const isNW: boolean = typeof nw !== "undefined" && nw["process"]?.["__nwjs"] === 1;
 
 export function getStateInstance({recursive} = {recursive: false}): FileInputState {
