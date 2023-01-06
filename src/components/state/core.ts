@@ -1,5 +1,3 @@
-
-
 export * from "./input-dest";
 export * from "./input-targ";
 export * from "./nw";
@@ -17,7 +15,7 @@ if (isNW && isNwSdk) {
 }
 
 if (!isNW) {
-    addFakeItems({filepath: "F:/fake-path/demo-filepath-1/demo-filename1.txt", filename: "demo-filename1.txt"});
-    addFakeItems({filepath: "F:/fake-path/demo-filepath-2/demo-filename2.txt", filename: "demo-filename2.txt"});
-    addFakeItems({filepath: "F:/fake-path/demo-filepath-3/demo-filename3.txt", filename: "demo-filename3.txt"});
+    addFakeItems({filename: "demo-filename1.txt"});
+    addFakeItems({filename: "demo-filename2.txt"});
+    addFakeItems({filename: "demo-filename3.txt"});
 }

@@ -34,8 +34,13 @@ function addItem({filepath, filename}: {filepath: string, filename: string}) {
 async function appendEntries(entries: WebFileEntry[]) {
     for (const entry of entries) {
         const filename = entry.name;
-        const filepath = isNW ? entry.nativePath : "F:/fake-path/" + filename;
-        addItem({filepath, filename});
+        let filepath;
+        if (isNW) {
+            filepath = entry.nativePath;
+            addItem({filename, filepath});
+        } else {
+            filepath = addFakeItems({filename});
+        }
 
         const stat = await fs.lstat(filepath) as Stats;
         const isSymbolicLink = stat.isSymbolicLink();
@@ -50,4 +55,8 @@ export function clearTargets() {
     items.value = [];
 }
 
-export const addFakeItems = addItem;
+export function addFakeItems({filename}: {filename: string}) {
+    const fakeFilepath = "F:/fake-path/" + filename;
+    addItem({filename, filepath: fakeFilepath});
+    return fakeFilepath;
+}
