@@ -7,13 +7,13 @@ export class WebFileEntry {
     /**
      * @param {Object} init
      * @param {"file"|"folder"} init.type
-     * @param {FileWithPath|File?} init.file
+     * @param {File|FileWithPath?} init.file
      * @param {WebFileEntry?} init.parent
      * @param {String?} init.name
      */
     constructor({file, parent, type, name}) {
         if (file) {
-            /** @type {FileWithPath|File|undefined} */
+            /** @type {File|FileWithPath|undefined} */
             this.file = file;
         }
         if (parent) {
