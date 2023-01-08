@@ -17,7 +17,7 @@ export class WebFileEntry implements Iterable<WebFileEntry> {
     _contentSize: number
 
     constructor(opts: {
-        file?: File,
+        file?: File | FileWithPath,
         parent?: WebFileEntry,
         type: WebFileEntryType,
         name?: string
