@@ -93,7 +93,7 @@ const {
 watchEffect(() => {
   isNwDirectory.value = nwdirectory.value;
 });
-watchEffect(() => {
+onMounted(() => {
   inputElem.value = templateInputElem.value;
 });
 
