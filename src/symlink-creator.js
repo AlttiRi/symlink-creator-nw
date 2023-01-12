@@ -13,7 +13,6 @@ export async function createSymlink({
         targetFullPath,
         relative,
     });
-    console.log(await fs.stat(targetFullPath));
 
     const symlinkFullPath = path.join(destinationDirPath, symlinkName);
     const targetRelPath = path.relative(destinationDirPath, targetFullPath) || ".";

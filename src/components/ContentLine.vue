@@ -22,6 +22,7 @@ import {ref, Ref} from "vue";
 import {destDirectoryFullPath, hasDestination, items, useRelPath, SymlinkInfoItem} from "./state/core";
 import {createSymlink}   from "../symlink-creator.js";
 import {windowsFilename} from "../util.js";
+import fs                from "../node-api/node-fs.js";
 
 const props = defineProps(["item"]);
 const item: SymlinkInfoItem = props.item;
@@ -49,6 +50,13 @@ async function create() {
   }
 }
 
+async function logStats() {
+  const stats = await fs.lstat(item.filepath)
+  console.log("[lstat]", item.filename);
+  console.log("[lstat]", stats);
+  const {ctimeMs: ctime, mtimeMs: mtime, atimeMs: atime, birthtimeMs: btime} = stats;
+  console.log("[lstat.times]", {btime, mtime, ctime, atime});
+}
 
 async function onBlur() {
   console.log("onBlur");
