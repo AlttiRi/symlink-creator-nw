@@ -1,7 +1,7 @@
-import {FileInputState, getStateInstance} from "../file-input/file-input-state.js";
+import {FileInputState, getStateInstance} from "../file-input/file-input-state";
 import {ref, Ref, toRaw, unref, watchEffect} from "vue";
-import {WebFileEntry} from "../file-input/WebFileEntry.js";
-import fs from "../../node-api/node-fs.js";
+import {WebFileEntry} from "../file-input/WebFileEntry";
+import fs from "../../node-api/node-fs";
 import {isNW} from "./nw";
 import {Stats} from "fs";
 

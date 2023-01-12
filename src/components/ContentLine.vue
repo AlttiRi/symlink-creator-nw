@@ -1,5 +1,5 @@
 <template>
-  <div class="content-line">
+  <div class="content-line" @click="logStats">
 
     <div class="line-1 buttons">
       <button @click="create" :disabled="!hasDestination" :title="error">Create</button>
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import {ref, Ref} from "vue";
 import {destDirectoryFullPath, hasDestination, items, useRelPath, SymlinkInfoItem} from "./state/core";
-import {createSymlink} from "../symlink-creator.js";
+import {createSymlink}   from "../symlink-creator.js";
 import {windowsFilename} from "../util.js";
 
 const props = defineProps(["item"]);

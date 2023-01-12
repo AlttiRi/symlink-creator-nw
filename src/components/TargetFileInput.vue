@@ -12,8 +12,8 @@
 <script setup>
 import FileInput from "./file-input/FileInput.vue";
 import FileInputPromptText_Targ from "./FileInputPromptText_Targ.vue";
-import Options from "./Options.vue";
-import {targetFileInputState} from "./state/core";
+import Options                  from "./Options.vue";
+import {targetFileInputState}   from "./state/core";
 </script>
 
 <style scoped lang="scss">
