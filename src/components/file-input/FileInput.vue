@@ -1,49 +1,49 @@
 <template>
-<div
-    class="file-input"
-    ref="fileInputElem"
-    :class="{'drop-hover': dropHover}"
-    tabindex="0"
-    @keydown="onKeyDown"
->
-  <label>
-    <input type="file"
-           :accept="accept"
-           :multiple="multiple"
-           @change="onFileInputChange"
-           style="display: none"
-           :nwdirectory="nwdirectory"
-           ref="templateInputElem"
-    >
+  <div
+      class="file-input"
+      ref="fileInputElem"
+      :class="{'drop-hover': dropHover}"
+      tabindex="0"
+      @keydown="onKeyDown"
+  >
+    <label>
+      <input type="file"
+             :accept="accept"
+             :multiple="multiple"
+             @change="onFileInputChange"
+             style="display: none"
+             :nwdirectory="nwdirectory"
+             ref="templateInputElem"
+      >
 
-    <span class="content hover" v-if="dropHover">
+      <span class="content hover" v-if="dropHover">
       <slot name="hover"><FileInputDefaultHoverText :state="state"/></slot>
     </span>
-    <span class="content selected" v-else-if="file && !parsing">
+      <span class="content selected" v-else-if="file && !parsing">
       <slot name="selected"><FileInputDefaultText :state="state"/></slot>
     </span>
-    <span class="content prompt" v-else>
+      <span class="content prompt" v-else>
       <slot name="prompt"><FileInputDefaultText :state="state"/></slot>
     </span>
 
-  </label>
-  <teleport to="body">
-    <div class="file-input-hover-modal" :class="{'drop-hover': dropHover}"></div>
-  </teleport>
-</div>
+    </label>
+    <teleport to="body">
+      <div class="file-input-hover-modal" :class="{'drop-hover': dropHover}"></div>
+    </teleport>
+  </div>
 </template>
 
 <script setup lang="ts">
 import FileInputDefaultHoverText from "./FileInputDefaultHoverText.vue";
-import FileInputDefaultText from "./FileInputDefaultText.vue";
-import {FileInputState} from "./file-input-state";
+import FileInputDefaultText      from "./FileInputDefaultText.vue";
+import {FileInputState, HTMLFileInputElement} from "./file-input-state";
 
 import {
   ref, toRefs, onMounted, computed, onBeforeUnmount, watchEffect,
   PropType, Ref, ComputedRef
 } from "vue";
 
-const templateInputElem: Ref<HTMLInputElement> = ref(null);
+const templateInputElem: Ref<HTMLFileInputElement | null> = ref(null);
 
 const props = defineProps({
   globalDropZone: {
@@ -51,7 +51,8 @@ const props = defineProps({
     default: true
   },
   dropZoneSelector: {
-    type: String
+    type: String,
+    default: null
   },
   accept: {
     type: String,
@@ -98,20 +99,20 @@ onMounted(() => {
 });
 
 function onFileInputChange(event: Event) {
-  const fileElem = event.target as HTMLInputElement;
+  const fileElem = event.target as HTMLFileInputElement;
   setFiles(fileElem.files);
 }
 
-const fileInputElem: Ref<HTMLElement> = ref(null);
+const fileInputElem: Ref<HTMLElement | null> = ref(null);
 
-const dropZone: ComputedRef<HTMLElement> = computed(() => {
+const dropZone: ComputedRef<HTMLElement | null> = computed(() => {
   if (dropZoneSelector.value) {
     return document.querySelector(dropZoneSelector.value);
   } else
   if (globalDropZone.value) {
     return document.body;
   } else
-  return fileInputElem.value;
+    return fileInputElem.value;
 });
 
 onMounted(() => {
@@ -122,20 +123,24 @@ onBeforeUnmount(() => {
 });
 
 function initListeners() {
-  dropZone.value.addEventListener("drop", onDrop);
-  dropZone.value.addEventListener("dragover", onDragOver);
-  dropZone.value.addEventListener("dragleave", onDragLeave);
+  if (!dropZone.value) {
+    return;
+  }
   dropZone.value.addEventListener("dragenter", onDragEnter);
-
-  document.body.addEventListener("dragover", dragOverCallback);
+  dropZone.value.addEventListener("dragleave", onDragLeave);
+  dropZone.value.addEventListener("drop",      onDrop);
+  dropZone.value.addEventListener("dragover",  onDragOver);
+  document.body.addEventListener("dragover",   onDragOverNonDropZone);
 }
 function removeListeners() {
-  dropZone.value.removeEventListener("drop", onDrop);
-  dropZone.value.removeEventListener("dragover", onDragOver);
-  dropZone.value.removeEventListener("dragleave", onDragLeave);
+  if (!dropZone.value) {
+    return;
+  }
   dropZone.value.removeEventListener("dragenter", onDragEnter);
-
-  document.body.removeEventListener("dragover", dragOverCallback);
+  dropZone.value.removeEventListener("dragleave", onDragLeave);
+  dropZone.value.removeEventListener("drop",      onDrop);
+  dropZone.value.removeEventListener("dragover",  onDragOver);
+  document.body.removeEventListener("dragover",   onDragOverNonDropZone);
 }
 
 function stopEvent(event: Event) {
@@ -150,7 +155,9 @@ function onDrop(event: DragEvent) {
 }
 function onDragOver(event: DragEvent) {
   stopEvent(event);
-  event.dataTransfer.dropEffect = "copy";
+  if (event.dataTransfer) {
+    event.dataTransfer.dropEffect = "copy";
+  }
 }
 function onDragEnter(event: DragEvent) {
   stopEvent(event);
@@ -163,22 +170,24 @@ function onDragEnter(event: DragEvent) {
 }
 function onDragLeave(event: DragEvent) {
   stopEvent(event);
-  if (!dropZone.value.contains(event.relatedTarget as Node)) {
+  if (!dropZone.value?.contains(event.relatedTarget as Node)) {
     dropHover.value = false;
     resetDataTransferHover();
   }
 }
 
-function dragOverCallback(event: DragEvent) {
-  if (!dropZone.value.contains(event.target as Node)) {
+function onDragOverNonDropZone(event: DragEvent) {
+  if (!dropZone.value?.contains(event.target as Node)) {
     stopEvent(event);
-    event.dataTransfer.dropEffect = "none";
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = "none";
+    }
   }
 }
 
 function onKeyDown(event: KeyboardEvent) {
   if (event.key === "Enter") {
-    fileInputElem.value.querySelector("label").click();
+    fileInputElem.value?.querySelector("label")?.click();
   }
 }
 

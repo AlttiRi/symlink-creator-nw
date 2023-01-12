@@ -1,32 +1,29 @@
-declare enum WebFileEntryType {
-    file = "file",
-    folder = "folder",
-}
+export type WebFileEntryType = "file" | "folder";
 
 export interface FileWithPath extends File {
     readonly path?: string;
 }
 
 export class WebFileEntry implements Iterable<WebFileEntry> {
-    readonly type?:   WebFileEntryType
-    readonly file?:   File | FileWithPath
+    readonly type:    WebFileEntryType
+    readonly file:    File | FileWithPath
+    readonly _name?:  string
     readonly parent?: WebFileEntry
-    readonly _name:   string
 
     children?: WebFileEntry[]
     _contentSize: number
 
     constructor(opts: {
-        file?: File | FileWithPath,
+        type:    WebFileEntryType,
+        file:    File | FileWithPath,
+        name?:   string,
         parent?: WebFileEntry,
-        type: WebFileEntryType,
-        name?: string
     })
 
     get nativePath(): string | undefined
-    get name(): string | undefined
-    addChild(entry: WebFileEntry)
-    increaseContentSize(size: number)
+    get name(): string
+    addChild(entry: WebFileEntry): void
+    increaseContentSize(size: number): void
     get size(): number
     get mtime(): number
     get path(): WebFileEntry[]
@@ -39,3 +36,18 @@ export class WebFileEntry implements Iterable<WebFileEntry> {
     static fromDataTransfer(dt: DataTransfer, recursive: boolean): Promise<WebFileEntry[]>
     static fromFiles(files: File[], type?: WebFileEntryType): WebFileEntry[]
 }
+
+declare function fromFileSystemEntry(
+    fsEntry: FileSystemEntry,
+    parent: WebFileEntry | null,
+    recursive: boolean,
+    file?: File
+): Promise<WebFileEntry | null>
+
+declare function toFile(fsFileEntry: FileSystemFileEntry): Promise<File>
+
+declare function readFileSystemDirectoryEntry(fsDirEntry: FileSystemDirectoryEntry): AsyncGenerator<FileSystemEntry>
+
+declare function dtItemsToFileSystemEntries(dtItems: DataTransferItem[]): Promise<FileSystemEntry[]>
+
+declare function dtItemToFileSystemEntry(entry: DataTransferItem): Promise<FileSystemEntry>

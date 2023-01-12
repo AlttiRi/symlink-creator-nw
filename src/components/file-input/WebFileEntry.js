@@ -1,43 +1,44 @@
-export const WebFileEntryType = {
-    file:   "file",
-    folder: "folder",
-};
+/**
+ * A help type to hide dumb warnings.
+ * @typedef {"file" | "folder"} WebFileEntryTypeLike
+ */
 
 export class WebFileEntry {
     /**
      * @param {Object} init
-     * @param {"file"|"folder"} init.type
-     * @param {File|FileWithPath?} init.file
-     * @param {WebFileEntry?} init.parent
-     * @param {String?} init.name
+     * @param {WebFileEntryTypeLike} init.type
+     * @param {File|FileWithPath}    init.file
+     * @param {String?}              init.name
+     * @param {WebFileEntry?}        init.parent
      */
-    constructor({file, parent, type, name}) {
-        if (file) {
-            /** @type {File|FileWithPath|undefined} */
-            this.file = file;
+    constructor({file, type, name, parent}) {
+        /** @type {File|FileWithPath} */
+        this.file = file;
+
+        /** @type {WebFileEntryTypeLike} */
+        this.type = type;
+
+        if (name) {
+            /** @type {String|undefined}
+             *  @private  */
+            this._name = name;
         }
+
         if (parent) {
             /** @type {WebFileEntry|undefined} */
             this.parent = parent;
             parent.addChild(this);
         }
-        if (name) {
-            /** @type {String}
-             *  @private  */
-            this._name = name;
-        }
-        /** @type {"file"|"folder"} */
-        this.type = type;
     }
 
     /** @return {String|undefined} */
     get nativePath() {
-        return this.file?.path;
+        return this.file.path;
     }
 
     /** @return {String} */
     get name() {
-        return this._name || this.file?.name;
+        return this._name || this.file.name;
     }
 
     /** @private
@@ -79,12 +80,12 @@ export class WebFileEntry {
         if (this.type === "folder") {
             return this._contentSize || 0;
         }
-        return this.file?.size || 0;
+        return this.file.size || 0;
     }
 
     /** @return {Number} */
     get mtime() {
-        return this.file?.lastModified || 0;
+        return this.file.lastModified || 0;
     }
 
     /** @return {WebFileEntry[]} */
@@ -143,14 +144,14 @@ export class WebFileEntry {
 
     /**
      * @param {File[]} files
-     * @param {"file"|"folder"} type
+     * @param {WebFileEntryTypeLike?} type
      * @return {WebFileEntry[]}
      */
     static fromFiles(files, type = "file") {
         /** @type {WebFileEntry[]} */
         const result = [];
         for (const file of files) {
-            result.push(new WebFileEntry({file, type}));
+            result.push(new WebFileEntry({type, file}));
         }
         return result;
     }
@@ -160,7 +161,7 @@ export class WebFileEntry {
  * @param {FileSystemEntry} fsEntry
  * @param {WebFileEntry|null} parent
  * @param {boolean} recursive=false
- * @param {File} [file]
+ * @param {File?} file
  * @return {Promise<WebFileEntry|null>}
  */
 async function fromFileSystemEntry(fsEntry, parent = null, recursive = false, file) {

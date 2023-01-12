@@ -1,8 +1,12 @@
 import {computed, ComputedRef, DeepReadonly, readonly, Ref, ref, toRaw, watchEffect} from "vue";
-import {WebFileEntry, WebFileEntryType} from "./WebFileEntry.js";
+import {WebFileEntry} from "./WebFileEntry";
+
+export interface HTMLFileInputElement extends HTMLInputElement {
+    files: FileList; // Since `HTMLInputElement` has `FileList | null`
+}
 
 export type FileInputStatePrivate = {
-    inputElem:   Ref<HTMLInputElement>,
+    inputElem:   Ref<HTMLFileInputElement | null>,
     fileEntries: Ref<WebFileEntry[]>,
     file:  ComputedRef<WebFileEntry>,
     count: ComputedRef<number>,
@@ -12,9 +16,9 @@ export type FileInputStatePrivate = {
     dropHoverTypes: Ref<string[]>,
     parsing: Ref<boolean>,
 
-    setDataTransferHover(dt: DataTransfer): void,
+    setDataTransferHover(dt: DataTransfer | null): void,
     resetDataTransferHover(): void,
-    setDataTransfer(dt: DataTransfer): void,
+    setDataTransfer(dt: DataTransfer | null): void,
     setFiles(filelist: FileList, resetDataTransfer?: boolean): void,
 
     isNwDirectory: Ref<boolean>,
@@ -30,12 +34,12 @@ declare const nw: any
 const isNW: boolean = typeof nw !== "undefined" && nw["process"]?.["__nwjs"] === 1;
 
 export function getStateInstance({recursive} = {recursive: false}): FileInputState {
-    const fileEntries:  Ref<WebFileEntry[]>     = ref([]);
-    const files:        Ref<File[]>             = ref([]);
-    const inputElem:    Ref<HTMLInputElement>   = ref(null);
-    const parsing:      Ref<boolean>            = ref(false);
-    const dtItems:      Ref<DataTransferItem[]> = ref([]);
-    const dataTransfer: Ref<DataTransfer>    = ref(null);
+    const fileEntries:  Ref<WebFileEntry[]>  = ref([]);
+    const files:        Ref<File[]>          = ref([]);
+    const inputElem:    Ref<HTMLFileInputElement | null> = ref(null);
+    const parsing:      Ref<boolean>                     = ref(false);
+    const dtItems:      Ref<DataTransferItem[]>          = ref([]);
+    const dataTransfer: Ref<DataTransfer | null>         = ref(null);
     const dropHover:    Ref<boolean>         = ref(false);
     const dropHoverItemCount: Ref<number>    = ref(0);
     const dropHoverTypes:     Ref<string[]>  = ref([]);
@@ -50,7 +54,7 @@ export function getStateInstance({recursive} = {recursive: false}): FileInputSta
         } else
         if (isNW && isNwDirectory.value) {
             console.log("[isNwDirectory]");
-            fileEntries.value = WebFileEntry.fromFiles(files.value, WebFileEntryType.folder);
+            fileEntries.value = WebFileEntry.fromFiles(files.value, "folder");
         } else {
             console.log("[fromFiles]");
             fileEntries.value = WebFileEntry.fromFiles(files.value);
@@ -68,7 +72,10 @@ export function getStateInstance({recursive} = {recursive: false}): FileInputSta
         return fileEntries.value.length;
     });
 
-    function setDataTransferHover(dt: DataTransfer) {
+    function setDataTransferHover(dt: DataTransfer | null) {
+        if (!dt) {
+            return;
+        }
         const count:    number   = dt.items.length;
         const allTypes: string[] = [...dt.items].map(item => item.type);
         const types:    string[] = [...new Set(allTypes)];
@@ -82,7 +89,10 @@ export function getStateInstance({recursive} = {recursive: false}): FileInputSta
         dropHoverTypes.value = [];
     }
 
-    function setDataTransfer(dt: DataTransfer) {
+    function setDataTransfer(dt: DataTransfer | null) {
+        if (!dt) {
+            return;
+        }
         console.log("setDataTransfer", dt);
         setFiles(dt.files, false);
         _setDtItems(dt.items);
@@ -107,7 +117,9 @@ export function getStateInstance({recursive} = {recursive: false}): FileInputSta
     }
 
     function clearInput() {
-        inputElem.value.value = null;
+        if (inputElem.value) {
+            inputElem.value.value = "";
+        }
         files.value = [];
         dataTransfer.value = null;
         dtItems.value = [];
