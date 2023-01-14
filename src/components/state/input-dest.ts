@@ -1,6 +1,5 @@
-import {FileInputState, getStateInstance} from "../file-input/file-input-state.js";
 import {computed, ComputedRef, ref, Ref, toRaw, watchEffect} from "vue";
-import {WebFileEntry} from "../file-input/WebFileEntry";
+import {getStateInstance, FileInputState, WebFileEntry} from "@alttiri/vue-file-input";
 import {isNW} from "./nw";
 
 

@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import FileInput from "./file-input/FileInput.vue";
+import {FileInput} from "@alttiri/vue-file-input";
 import FileInputPromptText from "./FileInputPromptText_Dest.vue";
 import {clearDestination, clearTargets, descFileInputState, destDirectoryFullPath, hasDestination} from "./state/core";
 

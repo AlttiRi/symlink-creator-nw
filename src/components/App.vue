@@ -9,7 +9,7 @@
 
 <script setup>
 import Destination from "./Destination.vue";
-import Content from "./Content.vue";
+import Content     from "./Content.vue";
 
 function reload() {
   location.reload(); // chrome.runtime.reload?.();

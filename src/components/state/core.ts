@@ -7,7 +7,7 @@ import {Ref, ref} from "vue";
 export const useRelPath: Ref<boolean> = ref(false);
 
 
-import {addFakeItems} from "./input-targ.js";
+import {addFakeItems}  from "./input-targ.js";
 import {isNW, isNwSdk} from "./nw.js";
 
 if (isNW && isNwSdk) {

@@ -7,10 +7,9 @@
 </template>
 
 <script setup>
-import {items} from "./state/core";
-import ContentLine from "./ContentLine.vue";
+import ContentLine     from "./ContentLine.vue";
 import TargetFileInput from "./TargetFileInput.vue";
-
+import {items} from "./state/core";
 </script>
 
 <style scoped>
