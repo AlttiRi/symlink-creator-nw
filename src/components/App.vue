@@ -20,6 +20,14 @@ function reload() {
 .main {
   min-width: 720px;
   max-width: 1080px;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+hr {
+  width: 100%;
 }
 
 #reload {

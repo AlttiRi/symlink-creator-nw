@@ -2,6 +2,7 @@
   <div class="main-content">
       <ContentLine v-for="item of items" :item="item" :key="item.id"/>
       <TargetFileInput/>
+      <div class="space"></div>
   </div>
 </template>
 
@@ -15,5 +16,12 @@ import TargetFileInput from "./TargetFileInput.vue";
 <style scoped>
 .main-content {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.space {
+  height: 100%;
+  flex-grow: 21;
 }
 </style>
