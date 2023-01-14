@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import {ref, Ref} from "vue";
 import {destDirectoryFullPath, hasDestination, items, useRelPath, SymlinkInfoItem} from "./state/core";
-import {createSymlink}   from "../symlink-creator.js";
+import {createSymlink, getZoneIdentifier} from "../symlink-creator.js";
 import {windowsFilename} from "../util.js";
 import fs                from "../node-api/node-fs.js";
 
@@ -51,11 +51,14 @@ async function create() {
 }
 
 async function logStats() {
-  const stats = await fs.lstat(item.filepath)
+  const stats = await fs.lstat(item.filepath);
   console.log("[lstat]", item.filename);
   console.log("[lstat]", stats);
   const {ctimeMs: ctime, mtimeMs: mtime, atimeMs: atime, birthtimeMs: btime} = stats;
   console.log("[lstat.times]", {btime, mtime, ctime, atime});
+
+  const data = getZoneIdentifier(item.filepath);
+  console.log("ZoneIdentifier:", data);
 }
 
 async function onBlur() {

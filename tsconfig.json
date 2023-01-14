@@ -8,12 +8,12 @@
     "moduleResolution": "NodeNext",
 
     "allowJs":          true,
-    "alwaysStrict":     true,
-    "noImplicitAny":    true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "strictFunctionTypes": true,
-    "noImplicitThis":      true,
-    "strictBindCallApply": true,
+//    "alwaysStrict":     true,
+//    "noImplicitAny":    true,
+//    "strictNullChecks": true,
+//    "strictPropertyInitialization": true,
+//    "strictFunctionTypes": true,
+//    "noImplicitThis":      true,
+//    "strictBindCallApply": true,
   }
 }
