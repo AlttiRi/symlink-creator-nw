@@ -57,7 +57,7 @@ async function logStats() {
   const {ctimeMs: ctime, mtimeMs: mtime, atimeMs: atime, birthtimeMs: btime} = stats;
   console.log("[lstat.times]", {btime, mtime, ctime, atime});
 
-  const data = getZoneIdentifier(item.filepath);
+  const data = await getZoneIdentifier(item.filepath);
   console.log("ZoneIdentifier:", data);
 }
 

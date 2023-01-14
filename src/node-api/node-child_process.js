@@ -15,9 +15,7 @@ if (typeof require !== "undefined") {
                 },
                 stdout: {
                     toString() {
-                        return "[ZoneTransfer] \n" +
-                            "ZoneId=3\n" +
-                            "HostUrl=about:internet";
+                        return "???$$$???";
                     }
                 }
             };

@@ -24,13 +24,13 @@ export async function createSymlink({
     await fs.symlink(symlinkContent, symlinkFullPath);
 }
 
-export function getZoneIdentifier(file) {
-    const child = ch_pr.spawnSync("cmd", ["/c", "more", "<", `${file}:Zone.Identifier`]);
-    const error = child.error || child.stderr?.toString();
-    if (error) {
-        console.error("error", error);
-        throw error;
+export async function getZoneIdentifier(filepath) {
+    try {
+        const data = await fs.readFile(`${filepath}:Zone.Identifier`);
+        return data.toString();
+    } catch (e) {
+        console.error(e);
+        return null;
     }
-    return child.stdout?.toString();
 }
 

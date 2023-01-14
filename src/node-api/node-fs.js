@@ -29,8 +29,20 @@ if (typeof require !== "undefined") {
         },
         async readlink(path, options) {
             console.log("[dummy] fs.readlink:", path);
+            return {
+                toString() {
+                    return "???$$$???";
+                }
+            };
         },
-
+        async readFile(path, options) {
+            console.log("[dummy] fs.readFile:", path);
+            return {
+                toString() {
+                    return "???$$$???";
+                }
+            };
+        },
     }
 }
 
