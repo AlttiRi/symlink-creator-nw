@@ -4,7 +4,7 @@
   "type": "module",
   "main": "dist/index.html",
   "devDependencies": {
-    "@alttiri/vue-file-input": "1.0.0",
+    "@alttiri/vue-file-input": "1.2.0",
     "@rollup/plugin-commonjs": "24.0.0",
     "@rollup/plugin-node-resolve": "15.0.1",
     "@types/chrome": "0.0.206",
