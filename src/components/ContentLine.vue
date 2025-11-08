@@ -2,8 +2,9 @@
   <div class="content-line" @click="logStats">
 
     <div class="line-1 buttons">
-      <button @click="create" :disabled="!hasDestination" :title="error">Create</button>
-      <button @click="remove">Remove</button>
+      <button @click="create" :disabled="!hasDestination" title="Create a sym link for the target item (file/folder)">Create</button>
+      <button @click="remove" title="Deselect item">Deselect</button>
+      <div class="error" v-if="error" :title="error || ''">error</div>
     </div>
 
     <div class="source-path line-1">{{item.filepath.slice(0, -item.filename.length)}}</div>
@@ -98,7 +99,19 @@ $gap-w: 5px;
 
 .buttons > button {
   margin-right: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 22px;
 }
 
+.error {
+  box-sizing: border-box;
+  border: 1px solid black;
+  padding: 1px 3px;
+  border-radius: 2px;
+  background-color: lightgray;
+}
 
 </style>
