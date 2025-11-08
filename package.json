@@ -5,8 +5,8 @@
   "main": "http://localhost:5173/index.html",
   "node-remote": "http://localhost:5173",
   "devDependencies": {
-    "@alttiri/util-js": "1.19.3-20250629",
-    "@alttiri/vue-file-input": "1.7.0-20251108",
+    "@alttiri/util-js": "1.19.4-20251108",
+    "@alttiri/vue-file-input": "1.7.1-20251108",
     "@rollup/plugin-commonjs": "29.0.0",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@types/chrome": "0.1.27",
