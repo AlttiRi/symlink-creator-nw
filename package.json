@@ -1,8 +1,8 @@
 {
   "name": "symlink-creator-nw",
-  "version": "0.1.0",
+  "version": "0.1.0-dev",
   "type": "module",
-  "main": "dist/index.html",
+  "main": "http://localhost:5173/index.html",
   "node-remote": "http://localhost:5173",
   "devDependencies": {
     "@alttiri/util-js": "1.19.3-20250629",
