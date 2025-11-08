@@ -11,7 +11,13 @@
           :multiple="false"
           :nwdirectory="true"
       >
-        <template v-slot:prompt><FileInputPromptText :state="descFileInputState"/></template>
+        <template v-slot:default>
+          <FileInputDefault :state="descFileInputState">
+            <template v-slot:prompt>
+              <FileInputPromptText :state="descFileInputState"/>
+            </template>
+          </FileInputDefault>
+        </template>
       </FileInput>
     </div>
 
@@ -20,7 +26,7 @@
 </template>
 
 <script setup>
-import {FileInput} from "@alttiri/vue-file-input";
+import {FileInput, FileInputDefault} from "@alttiri/vue-file-input";
 import FileInputPromptText from "./FileInputPromptText_Dest.vue";
 import {clearDestination, clearTargets, descFileInputState, destDirectoryFullPath, hasDestination} from "./state/core";
 

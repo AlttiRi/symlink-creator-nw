@@ -18,11 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref} from "vue";
+import {ref, useTemplateRef, Ref} from "vue";
 import {destDirectoryFullPath, hasDestination, items, useRelPath, SymlinkInfoItem} from "./state/core";
 import {createSymlink, getZoneIdentifier} from "../symlink-creator.js";
 import {windowsFilename} from "../util.js";
-import fs                from "../node-api/node-fs.js";
+import {fs}              from "../node-api.js";
 
 const props = defineProps(["item"]);
 const item: SymlinkInfoItem = props.item;
@@ -31,11 +31,15 @@ function remove() {
   items.value = items.value.filter(i => i !== item);
 }
 
-const symlinkNameElem: Ref<HTMLElement> = ref(null);
+const symlinkNameElem: Ref<HTMLDivElement | null> = useTemplateRef("symlinkNameElem");
 const symlinkName: string = item.symlink;
-const error: Ref<string> = ref(null);
+const error: Ref<string | null> = ref(null);
 
 async function create() {
+  if (!destDirectoryFullPath.value) {
+    console.warn("Missed destDirectoryFullPath");
+    return;
+  }
   try {
     await createSymlink({
       destinationDirPath: destDirectoryFullPath.value,
@@ -45,7 +49,7 @@ async function create() {
     });
     error.value = null;
   } catch (e) {
-    error.value = e;
+    error.value = String(e);
     console.error(e);
   }
 }
@@ -63,8 +67,11 @@ async function logStats() {
 
 async function onBlur() {
   console.log("onBlur");
+  if (!symlinkNameElem.value) {
+    return;
+  }
 
-  let newName = symlinkNameElem.value.textContent;
+  let newName = symlinkNameElem.value.textContent!; // !
   newName = windowsFilename(newName);
 
   symlinkNameElem.value.textContent = newName;

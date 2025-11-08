@@ -1,7 +1,6 @@
 import {ref, Ref, toRaw, unref, watchEffect} from "vue";
 import {getStateInstance, FileInputState, WebFileEntry} from "@alttiri/vue-file-input";
-import fs from "../../node-api/node-fs";
-import {isNW} from "./nw";
+import {fs} from "../../node-api.js";
 import {Stats} from "fs";
 
 
@@ -33,14 +32,14 @@ function addItem({filepath, filename}: {filepath: string, filename: string}) {
 async function appendEntries(entries: WebFileEntry[]) {
     for (const entry of entries) {
         const filename = entry.name;
-        let filepath;
-        if (isNW) {
-            filepath = entry.nativePath;
-            addItem({filename, filepath});
-        } else {
-            filepath = addFakeItems({filename});
+
+        const filepath = entry.nativePath;
+        if (!filepath) {
+            console.warn("nativePath is missing");
+            return;
         }
 
+        addItem({filename, filepath});
         const stat = await fs.lstat(filepath) as Stats;
         const isSymbolicLink = stat.isSymbolicLink();
         console.log("[isSymbolicLink]:", stat.isSymbolicLink());
@@ -52,10 +51,4 @@ async function appendEntries(entries: WebFileEntry[]) {
 
 export function clearTargets() {
     items.value = [];
-}
-
-export function addFakeItems({filename}: {filename: string}) {
-    const fakeFilepath = "F:/fake-path/" + filename;
-    addItem({filename, filepath: fakeFilepath});
-    return fakeFilepath;
 }

@@ -8,6 +8,13 @@ Simple demo NW.js application to create symbolic links.
 - Download [NW.js SDK](https://nwjs.io/), then unpack it to `C:/progs/nwjs-sdk`.
 - Run `run-with-sdk` (`.bat`, or `.sh`) file.
 
+For development change `"main"` in `package.json`
+from `"dist/index.html"` to `"http://localhost:5173/index.html"` and add the follow line:
+```
+"node-remote": "http://localhost:5173",
+```
+
+
 ---
 
 It supports drag'n'drop.

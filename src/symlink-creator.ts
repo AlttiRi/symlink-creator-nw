@@ -1,13 +1,20 @@
-import fs    from "./node-api/node-fs.js";
-import path  from "./node-api/node-path.js";
-import ch_pr from "./node-api/node-child_process.js";
+import {
+    path, fs,
+}  from "./node-api.js";
+
+export type CSType = {
+    destinationDirPath: string,
+    symlinkName:        string,
+    targetFullPath:     string,
+    relative:           boolean,
+};
 
 export async function createSymlink({
     destinationDirPath,
     symlinkName,
     targetFullPath,
     relative,
-}) {
+}: CSType) {
     console.log("createSymlink", {
         destinationDirPath,
         symlinkName,
@@ -24,13 +31,13 @@ export async function createSymlink({
     await fs.symlink(symlinkContent, symlinkFullPath);
 }
 
-export async function getZoneIdentifier(filepath) {
+export async function getZoneIdentifier(filepath: string): Promise<string> {
     try {
         const data = await fs.readFile(`${filepath}:Zone.Identifier`);
         return data.toString();
     } catch (e) {
         console.error(e);
-        return null;
+        return Promise.resolve("");
     }
 }
 

@@ -3,8 +3,12 @@
     <Options/>
     <div class="file-input">
       <FileInput :state="targetFileInputState" :drop-zone-selector="'.main-content'">
-        <template v-slot:prompt>
-          <FileInputPromptText_Targ :state="targetFileInputState"/>
+        <template v-slot:default>
+          <FileInputDefault :state="targetFileInputState">
+            <template v-slot:prompt>
+              <FileInputPromptText_Targ :state="targetFileInputState"/>
+            </template>
+          </FileInputDefault>
         </template>
       </FileInput>
     </div>
@@ -12,10 +16,11 @@
 </template>
 
 <script setup>
-import {FileInput} from "@alttiri/vue-file-input";
+import {FileInput, FileInputDefault} from "@alttiri/vue-file-input";
 import FileInputPromptText_Targ from "./FileInputPromptText_Targ.vue";
 import Options                  from "./Options.vue";
-import {targetFileInputState}   from "./state/core";
+import {descFileInputState, targetFileInputState} from "./state/core";
+import FileInputPromptText from "./FileInputPromptText_Dest.vue";
 </script>
 
 <style scoped lang="scss">

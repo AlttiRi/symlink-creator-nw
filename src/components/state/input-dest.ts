@@ -1,10 +1,9 @@
 import {computed, ComputedRef, ref, Ref, toRaw, watchEffect} from "vue";
 import {getStateInstance, FileInputState, WebFileEntry} from "@alttiri/vue-file-input";
-import {isNW} from "./nw";
 
 
 export const descFileInputState: FileInputState = getStateInstance({recursive: false});
-const destDirectory: Ref<WebFileEntry> = ref(null);
+const destDirectory: Ref<WebFileEntry | null> = ref(null);
 export function clearDestination() {
     destDirectory.value = null;
 }
@@ -19,12 +18,12 @@ watchEffect(() => {
     }
     console.log("[destination file input entries]:", entries);
     descFileInputState.clearInput();
-    destDirectory.value = entries.find(e => e.type === "folder");
+    destDirectory.value = entries.find(e => e.type === "folder") || null;
 });
 
-export const destDirectoryFullPath: ComputedRef<string> = computed(() => {
+export const destDirectoryFullPath: ComputedRef<string | undefined> = computed(() => {
     if (!destDirectory.value) {
         return;
     }
-    return destDirectory.value.nativePath || (!isNW && "C://.../demo/" + destDirectory.value.name);
+    return destDirectory.value.nativePath;
 });
